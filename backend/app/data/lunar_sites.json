@@ -1,0 +1,148 @@
+[
+  {
+    "id": "luna-shackleton-rim",
+    "name": "Shackleton Crater Rim",
+    "body": "Moon",
+    "region": "South Pole",
+    "latitude": -89.9,
+    "longitude": 0.0,
+    "elevation_m": -2800,
+    "slope_degrees": 8.5,
+    "solar_illumination_pct": 88.0,
+    "water_ice_probability_pct": 94.0,
+    "earth_visibility_pct": 78.5,
+    "thermal_min_k": 40,
+    "thermal_max_k": 220,
+    "natural_radiation_shielding_pct": 12.0,
+    "geological_context": "Impact crater rim bordering a Permanently Shadowed Region (PSR). Direct access to ultra-cold volatile/water-ice traps within 2.5 km traverse distance. Basaltic anorthosite regolith.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 55.0,
+      "oxygen_extraction_ilmenite_pct": 8.2,
+      "solar_flux_w_m2": 1361
+    },
+    "hazards": [
+      "Steep 30-degree slopes into crater interior requiring tethered rover systems",
+      "Cryogenic temperatures in shadow (-233°C / 40K)",
+      "Low sun elevation angles causing severe elongated shadows"
+    ],
+    "scientific_significance": "Key Artemis III/IV exploration candidate; cold traps preserve primordial solar system volatile delivery records.",
+    "recommended_analog_type": "polar_crater"
+  },
+  {
+    "id": "luna-malapert-mountain",
+    "name": "Malapert Mountain (Peak of Eternal Light)",
+    "body": "Moon",
+    "region": "South Pole",
+    "latitude": -85.99,
+    "longitude": 2.93,
+    "elevation_m": 5000,
+    "slope_degrees": 6.0,
+    "solar_illumination_pct": 93.5,
+    "water_ice_probability_pct": 68.0,
+    "earth_visibility_pct": 92.0,
+    "thermal_min_k": 150,
+    "thermal_max_k": 235,
+    "natural_radiation_shielding_pct": 10.0,
+    "geological_context": "Elevated massif providing near-continuous solar illumination and uninterrupted line-of-sight communication with Earth. 15 km from Faustini crater ice deposits.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 32.0,
+      "oxygen_extraction_ilmenite_pct": 9.5,
+      "solar_flux_w_m2": 1361
+    },
+    "hazards": [
+      "Transit distance to permanently shadowed water ice (>12 km)",
+      "Micrometeorite exposure due to high topographic prominence",
+      "Electrostatic regolith lofting along terminator"
+    ],
+    "scientific_significance": "Optimal telecommunications relay & early power station node for lunar polar network.",
+    "recommended_analog_type": "high_altitude_plateau"
+  },
+  {
+    "id": "luna-marius-hills-pit",
+    "name": "Marius Hills Lava Tube Skylight",
+    "body": "Moon",
+    "region": "Oceanus Procellarum",
+    "latitude": 14.09,
+    "longitude": 303.23,
+    "elevation_m": -320,
+    "slope_degrees": 1.5,
+    "solar_illumination_pct": 48.0,
+    "water_ice_probability_pct": 12.0,
+    "earth_visibility_pct": 52.0,
+    "thermal_min_k": 253,
+    "thermal_max_k": 253,
+    "natural_radiation_shielding_pct": 99.4,
+    "geological_context": "Subsurface collapsed volcanic lava conduit (skylight). Vast subterranean void (~100m wide, 40m ceiling) formed by ancient mare basalt volcanic flows.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 4.0,
+      "oxygen_extraction_ilmenite_pct": 14.8,
+      "solar_flux_w_m2": 1361
+    },
+    "hazards": [
+      "Vertical shaft ingress/egress requiring hoists or elevator systems",
+      "Complete darkness within subsurface tube requiring artificial illumination and beamed power",
+      "No direct in-situ water ice"
+    ],
+    "scientific_significance": "Perfect natural radiation, micrometeorite, and thermal shelter for long-duration permanent settlement.",
+    "recommended_analog_type": "lava_tube"
+  },
+  {
+    "id": "luna-connecting-ridge",
+    "name": "Connecting Ridge (Shackleton-de Gerlache)",
+    "body": "Moon",
+    "region": "South Pole",
+    "latitude": -89.44,
+    "longitude": 222.0,
+    "elevation_m": -1200,
+    "slope_degrees": 7.2,
+    "solar_illumination_pct": 89.2,
+    "water_ice_probability_pct": 82.5,
+    "earth_visibility_pct": 84.0,
+    "thermal_min_k": 90,
+    "thermal_max_k": 225,
+    "natural_radiation_shielding_pct": 15.0,
+    "geological_context": "Narrow morphological ridge connecting two major polar impact structures. Excellent multi-directional traverse pathways for pressurized rovers.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 44.0,
+      "oxygen_extraction_ilmenite_pct": 8.8,
+      "solar_flux_w_m2": 1361
+    },
+    "hazards": [
+      "Narrow landing corridor bounded by steep declivities",
+      "Occasional eclipse events (lunar dusk) requiring 54-72 hours of battery reserve",
+      "Severe abrasive regolith wear on rover seals"
+    ],
+    "scientific_significance": "Artemis III designated science area; provides dual access to both Shackleton and de Gerlache micro-environments.",
+    "recommended_analog_type": "polar_crater"
+  },
+  {
+    "id": "luna-faustini-rim",
+    "name": "Faustini Crater Rim",
+    "body": "Moon",
+    "region": "South Pole",
+    "latitude": -87.1,
+    "longitude": 77.0,
+    "elevation_m": -1900,
+    "slope_degrees": 9.0,
+    "solar_illumination_pct": 82.0,
+    "water_ice_probability_pct": 89.0,
+    "earth_visibility_pct": 68.0,
+    "thermal_min_k": 55,
+    "thermal_max_k": 218,
+    "natural_radiation_shielding_pct": 18.0,
+    "geological_context": "Complex degraded impact crater harboring extensive radar-reflective volatile deposits verified by LRO Mini-RF and LAMP instruments.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 51.0,
+      "oxygen_extraction_ilmenite_pct": 7.9,
+      "solar_flux_w_m2": 1361
+    },
+    "hazards": [
+      "Moderate direct-to-Earth communication occultation during lunar librations",
+      "Cryogenic frost migration hazards on solar panel hinges",
+      "Loose anorthositic scree slope instability"
+    ],
+    "scientific_significance": "High concentration of organic volatiles and nitrogen-bearing compounds trapped alongside water ice.",
+    "recommended_analog_type": "polar_crater"
+  }
+]
+

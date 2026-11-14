@@ -1,0 +1,119 @@
+[
+  {
+    "id": "mars-jezero-crater",
+    "name": "Jezero Crater (Delta & Lacustrine Plains)",
+    "body": "Mars",
+    "region": "Syrtis Major Quadrangle",
+    "latitude": 18.38,
+    "longitude": 77.58,
+    "elevation_m": -2500,
+    "slope_degrees": 4.5,
+    "solar_illumination_pct": 74.0,
+    "water_ice_probability_pct": 58.0,
+    "earth_visibility_pct": 65.0,
+    "thermal_min_k": 180,
+    "thermal_max_k": 285,
+    "natural_radiation_shielding_pct": 24.0,
+    "geological_context": "Ancient paleolake basin featuring an exceptionally preserved river delta deposit rich in smectite clays, carbonates, and silica. In-situ verified by Perseverance rover.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 38.0,
+      "oxygen_extraction_ilmenite_pct": 12.0,
+      "solar_flux_w_m2": 590
+    },
+    "hazards": [
+      "Seasonal global dust storms reducing solar output by up to 95%",
+      "Atmospheric pressure (~610 Pa) requiring pressurized EVA suits and habitation",
+      "Perchlorate salts in regolith requiring chemical scrubbing"
+    ],
+    "scientific_significance": "Highest priority astrobiology site; direct biosignature search opportunity and extensive rover ground truth calibration.",
+    "recommended_analog_type": "paleolake_delta"
+  },
+  {
+    "id": "mars-arcadia-planitia",
+    "name": "Arcadia Planitia (Subsurface Ice Sheet)",
+    "body": "Mars",
+    "region": "Arcadia Quadrangle",
+    "latitude": 39.3,
+    "longitude": 189.7,
+    "elevation_m": -4100,
+    "slope_degrees": 1.2,
+    "solar_illumination_pct": 62.0,
+    "water_ice_probability_pct": 98.0,
+    "earth_visibility_pct": 72.0,
+    "thermal_min_k": 165,
+    "thermal_max_k": 260,
+    "natural_radiation_shielding_pct": 28.0,
+    "geological_context": "Vast, ultra-flat lowlands harboring massive sheets of pure subsurface water ice detected by SHARAD radar, situated only 1 to 2.5 meters beneath the surface dust layer.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 185.0,
+      "oxygen_extraction_ilmenite_pct": 6.5,
+      "solar_flux_w_m2": 480
+    },
+    "hazards": [
+      "Lower mid-latitude solar insolation compared to equatorial landing sites",
+      "Cryo-karst surface sublimation pits (brain terrain) complicating rover transit",
+      "Cold winter condensation of atmospheric CO2 frosts"
+    ],
+    "scientific_significance": "The gold-standard ISRU water hub for permanent human colonization and return propellant manufacture (CH4/LOX Sabatier reactor).",
+    "recommended_analog_type": "permafrost_tundra"
+  },
+  {
+    "id": "mars-noctis-labyrinthus",
+    "name": "Noctis Labyrinthus (Chasmata Network)",
+    "body": "Mars",
+    "region": "Valles Marineris Gateway",
+    "latitude": -7.0,
+    "longitude": 258.8,
+    "elevation_m": -1200,
+    "slope_degrees": 11.0,
+    "solar_illumination_pct": 82.0,
+    "water_ice_probability_pct": 72.0,
+    "earth_visibility_pct": 70.0,
+    "thermal_min_k": 195,
+    "thermal_max_k": 290,
+    "natural_radiation_shielding_pct": 52.0,
+    "geological_context": "Intricate labyrinth of steep-walled grabens, rift valleys, and tectonic collapse chasms. Canyon walls offer deep shadowing, hydrated sulfate beds, and relic glacial features.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 64.0,
+      "oxygen_extraction_ilmenite_pct": 10.4,
+      "solar_flux_w_m2": 590
+    },
+    "hazards": [
+      "Complex canyon morphology causing terrain obscuration of radio communications",
+      "Cliffside rockfall and slope debris flow risks during seismic events",
+      "Restricted landing ellipses requiring Pinpoint Landing (PPL) guidance"
+    ],
+    "scientific_significance": "Natural wind break and canyon topographic radiation shielding; reveals stratigraphy spanning millions of martian years.",
+    "recommended_analog_type": "hyper_arid_canyon"
+  },
+  {
+    "id": "mars-olympus-mons-cave",
+    "name": "Olympus Mons Flank (Volcanic Lava Cave)",
+    "body": "Mars",
+    "region": "Tharsis Montes",
+    "latitude": 18.6,
+    "longitude": 226.2,
+    "elevation_m": 1200,
+    "slope_degrees": 3.8,
+    "solar_illumination_pct": 45.0,
+    "water_ice_probability_pct": 25.0,
+    "earth_visibility_pct": 60.0,
+    "thermal_min_k": 240,
+    "thermal_max_k": 248,
+    "natural_radiation_shielding_pct": 98.7,
+    "geological_context": "Gigantic subterranean volcanic lava tube formed by ancient Tharsis shield volcanism. Over 80 meters tall with thick basalt roof providing immense structural integrity.",
+    "isru_potential": {
+      "water_extraction_rate_kg_per_ton": 15.0,
+      "oxygen_extraction_ilmenite_pct": 16.2,
+      "solar_flux_w_m2": 590
+    },
+    "hazards": [
+      "High elevation reduces atmospheric density for aerodynamic aerobraking during landing",
+      "Requires robotic spelunking and advanced vertical mobility tether systems",
+      "Limited direct line of sight to solar arrays installed on exterior plateau"
+    ],
+    "scientific_significance": "Maximum protection against Galactic Cosmic Rays (GCR) and Solar Particle Events (SPE). Pristine preservation of un-irradiated organic compounds.",
+    "recommended_analog_type": "lava_tube"
+  }
+]
+

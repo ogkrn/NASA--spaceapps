@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #05070f;
+  --foreground: #f1f5f9;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Cyber Card */
+.cyber-card {
+  background: rgba(15, 21, 40, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+.cyber-card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.cyber-card-mars {
+  background: rgba(26, 15, 12, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(234, 88, 12, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+.cyber-card-mars:hover {
+  border-color: rgba(251, 146, 60, 0.5);
+}
+
+/* Glowing text and borders */
+.glow-cyan {
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+}
+
+.glow-orange {
+  text-shadow: 0 0 12px rgba(249, 115, 22, 0.6);
+}
+
+.border-glow-cyan {
+  box-shadow: 0 0 15px -3px rgba(34, 211, 238, 0.35);
+}
+
+.border-glow-orange {
+  box-shadow: 0 0 15px -3px rgba(249, 115, 22, 0.35);
+}
+
+/* Space Background Grid */
+.bg-space-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Custom Cyber Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0d1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e294b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
