@@ -96,6 +96,46 @@ export function CompareView({ initialBody, initialSites }: CompareViewProps) {
   const [matches, setMatches] = useState<AnalogMatchResult[]>([]);
   const [analog, setAnalog] = useState<EarthAnalog | null>(null);
   const [node, setNode] = useState<CompareNode>("geology");
+  const [showSiteImage, setShowSiteImage] = useState(true);
+
+  const SITE_IMAGES: Record<string, { image: string; title: string; source: string; sourceUrl: string }> = {
+    "earth-devon-island": {
+      image: "https://images-assets.nasa.gov/image/ARC-2007-ACD07-0170-005/ARC-2007-ACD07-0170-005~medium.jpg",
+      title: "Haughton-Mars Project field site",
+      source: "NASA Ames Research Center archive",
+      sourceUrl: "https://archive.org/details/AILS-ACD07-0170-005",
+    },
+    "earth-hi-seas-mauna-loa": {
+      image: "https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/150000/150697/maunaloa_oli2_2022336_lrg.jpg",
+      title: "HI-SEAS / Mauna Loa volcanic flank",
+      source: "NASA Earth Observatory",
+      sourceUrl: "https://science.nasa.gov/earth/earth-observatory/living-the-lava-life-on-mauna-loa-150697/",
+    },
+    "earth-atacama-yungay": {
+      image: "https://www.nasa.gov/wp-content/uploads/2023/03/3-img_8314.jpg",
+      title: "Estación Yungay field operations",
+      source: "NASA Atacama Rover Astrobiology Drilling Studies",
+      sourceUrl: "https://www.nasa.gov/image-article/atacama-rover-astrobiology-drilling-studies-night-falls/",
+    },
+    "earth-svalbard-amase": {
+      image: "https://upload.wikimedia.org/wikipedia/commons/5/59/LOCAD-PTS_Used_to_Analyze_Hot_Springs_on_AMASE_2004.JPG",
+      title: "AMASE 2004 Svalbard field campaign",
+      source: "NASA GSFC / Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:LOCAD-PTS_Used_to_Analyze_Hot_Springs_on_AMASE_2004.JPG",
+    },
+    "earth-lanzarote-geopark": {
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/10/Lanzarote_5_Luc_Viatour.jpg",
+      title: "Cueva de los Verdes lava tube, Lanzarote",
+      source: "Wikimedia Commons · Cueva de los Verdes",
+      sourceUrl: "https://commons.wikimedia.org/wiki/Category:Cueva_de_los_Verdes",
+    },
+    "earth-mcmurdo-dry-valleys": {
+      image: "https://images-assets.nasa.gov/image/PIA12461/PIA12461~medium.jpg",
+      title: "Taylor and Wright Valleys, McMurdo Dry Valleys",
+      source: "NASA/JPL ASTER image archive",
+      sourceUrl: "https://www.jpl.nasa.gov/images/pia12461-dry-valleys-antarctica/",
+    },
+  };
 
   useEffect(() => {
     if (body === initialBody) {
@@ -123,6 +163,10 @@ export function CompareView({ initialBody, initialSites }: CompareViewProps) {
     });
   }, [site, analogs]);
 
+  useEffect(() => {
+    setShowSiteImage(true);
+  }, [analog?.id]);
+
   const selectedMatch = useMemo(
     () => matches.find((item) => item.analog_id === analog?.id),
     [analog, matches],
@@ -132,6 +176,7 @@ export function CompareView({ initialBody, initialSites }: CompareViewProps) {
   const mapBounds = `${(analog?.longitude ?? 0) - 0.12},${(analog?.latitude ?? 0) - 0.08},${(analog?.longitude ?? 0) + 0.12},${(analog?.latitude ?? 0) + 0.08}`;
   const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(mapBounds)}&layer=mapnik&marker=${analog?.latitude ?? 0},${analog?.longitude ?? 0}`;
   const observationSources = OBSERVATION_SOURCES.filter((source) => source.types.includes(analog?.analog_type || ""));
+  const siteImage = analog ? SITE_IMAGES[analog.id] : undefined;
 
   if (!site || !analog) {
     return <div className="rounded-2xl cyber-card p-10 text-sm text-slate-400">Loading comparison datasets...</div>;
@@ -224,6 +269,37 @@ export function CompareView({ initialBody, initialSites }: CompareViewProps) {
               <a href={mapUrl} target="_blank" rel="noreferrer" className="text-slate-300 hover:text-white">Open full map <ExternalLink className="inline h-3 w-3" /></a>
             </div>
           </div>
+          {siteImage && (
+            <div className="mt-3 overflow-hidden rounded-xl border border-emerald-900/60 bg-black/40">
+              <div className="flex items-center justify-between gap-3 border-b border-emerald-900/50 px-3 py-2">
+                <div>
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-emerald-300">Exact-site image</div>
+                  <div className="text-xs text-slate-300">{siteImage.title}</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSiteImage((visible) => !visible)}
+                  className="rounded-md border border-emerald-800 px-2 py-1 text-[10px] font-mono text-emerald-300 hover:bg-emerald-950/60"
+                >
+                  {showSiteImage ? "Hide image" : "Show image"}
+                </button>
+              </div>
+              {showSiteImage && (
+                <a href={siteImage.sourceUrl} target="_blank" rel="noreferrer" className="block">
+                  <img
+                    src={siteImage.image}
+                    alt={`${siteImage.title}, ${analog.location}, ${analog.country}`}
+                    className="h-56 w-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="flex items-center justify-between gap-3 px-3 py-2 text-[10px] text-slate-400">
+                    <span>{siteImage.source}</span>
+                    <span className="text-emerald-300">Open source page <ExternalLink className="inline h-3 w-3" /></span>
+                  </div>
+                </a>
+              )}
+            </div>
+          )}
           <div className="mt-3 rounded-xl border border-cyan-900/50 bg-cyan-950/10 p-3">
             <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-cyan-300">
               <Layers3 className="h-3.5 w-3.5" /> Earth observation products to inspect

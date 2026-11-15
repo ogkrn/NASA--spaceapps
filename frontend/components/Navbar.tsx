@@ -4,6 +4,7 @@ import React from "react";
 import { Compass, Cpu, Orbit, Sparkles, BookOpen, Layers, GitCompare, BookOpenCheck } from "lucide-react";
 
 interface NavbarProps {
+  onShowWelcome?: () => void;
   currentPlanet: "Moon" | "Mars";
   onSelectPlanet: (planet: "Moon" | "Mars") => void;
   mode: "scientific" | "educational";
@@ -13,6 +14,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
+  onShowWelcome,
   currentPlanet,
   onSelectPlanet,
   mode,
@@ -23,30 +25,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isMoon = currentPlanet === "Moon";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-space-700/80 bg-space-950/85 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-sky-900/40 bg-[#040916]/90 backdrop-blur-xl">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 min-h-[76px] py-4 flex flex-wrap gap-4 items-center justify-between">
         {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-800 p-0.5 shadow-lg shadow-cyan-900/30">
-            <Orbit className="w-6 h-6 text-cyan-200 animate-spin" style={{ animationDuration: "18s" }} />
+        <button onClick={onShowWelcome} className="flex items-center gap-3 text-left" aria-label="Return to ARES-LUNA welcome page">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-full border border-sky-400/60 bg-sky-950/60 shadow-lg shadow-black/30">
+            <Orbit className="w-5 h-5 text-sky-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold tracking-wider text-lg text-white font-mono">
-                ARES<span className="text-cyan-400">·</span>LUNA
+              <span className="font-extrabold tracking-[0.18em] text-lg text-slate-100 font-mono">
+              ARES<span className="text-sky-300">·</span>LUNA
               </span>
               <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">
-                v1.1 Evidence + Scenarios
+                FIELD INTELLIGENCE
               </span>
             </div>
             <p className="text-[11px] text-slate-400 hidden sm:block">
-              Planetary Analog Intelligence & Mission Simulator
+              Planetary analog intelligence / mission planning
             </p>
           </div>
-        </div>
+        </button>
 
         {/* Navigation Tabs */}
-        <nav className="order-3 w-full md:order-none md:w-auto flex flex-wrap items-center gap-1 bg-space-900/90 p-1 rounded-xl border border-space-700">
+        <nav className="order-3 w-full md:order-none md:w-auto flex flex-wrap items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/10">
           <button
             onClick={() => onSelectTab("explorer")}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
@@ -58,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
-            3D Explorer & Sites
+            Explore
           </button>
 
           <button
@@ -72,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            Analog Discovery
+            Analogs
           </button>
 
           <button
@@ -86,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Cpu className="w-3.5 h-3.5" />
-            Mission Simulator
+            Simulate
           </button>
 
           <button
@@ -100,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <GitCompare className="w-3.5 h-3.5" />
-            Compare Earth
+            Compare
           </button>
 
           <button
@@ -114,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            MCDA Ranking
+            Rank
           </button>
 
           <button
@@ -128,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <BookOpenCheck className="w-3.5 h-3.5" />
-            References & Data
+            Sources
           </button>
         </nav>
 
@@ -140,8 +142,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onSelectPlanet("Moon")}
               className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
                 isMoon
-                  ? "bg-slate-200 text-space-950 font-bold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-[#f4f0e8] text-[#17120f] font-bold shadow-sm"
+                    : "text-[#a7a49d] hover:text-white"
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" />
@@ -151,8 +153,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onSelectPlanet("Mars")}
               className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
                 !isMoon
-                  ? "bg-orange-600 text-white font-bold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-[#bd6944] text-white font-bold shadow-sm"
+                  : "text-[#a7a49d] hover:text-white"
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-orange-400 inline-block" />

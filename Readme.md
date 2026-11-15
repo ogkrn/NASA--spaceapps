@@ -43,6 +43,23 @@ Production frontend: `npm run build` then `npm start` inside `frontend`. Never r
 
 Optional container configuration: `docker compose up --build`. Docker execution was not available during this repair; this path is not runtime-verified. Ports bind to localhost. The previous unused PostGIS service is omitted because no application code queried it.
 
+## Deploy with Render and Vercel
+
+The repository includes [`render.yaml`](./render.yaml) for the FastAPI service. In Render, create a Blueprint from this repository, or create a Docker web service with:
+
+- Dockerfile: `backend/Dockerfile`
+- Docker context: `backend`
+- Health check path: `/health`
+- Port: `8000`
+- `CORS_ORIGINS`: JSON array containing the final Vercel URL, for example `["https://your-project.vercel.app"]`
+
+In Vercel, import the repository and set the project root directory to `frontend`. Use the default Next.js build settings, then add:
+
+- `BACKEND_URL`: the deployed Render URL, for example `https://ares-luna-api.onrender.com`
+- Do not set `NEXT_PUBLIC_API_URL` unless you intentionally want browser-direct API calls.
+
+The Next.js rewrite sends `/api/backend/*` to Render server-side, so the browser uses the Vercel origin and avoids CORS issues. After both services deploy, verify `https://<render-host>/health` and `https://<vercel-host>/api/backend/candidates?body=Moon`.
+
 ## Verify
 
 From the repository root with the virtual environment active:

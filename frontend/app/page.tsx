@@ -29,10 +29,90 @@ import {
   Loader2,
   Activity,
   MapPin,
-  ArrowUpRight
+  ArrowUpRight,
+  ArrowRight,
+  Bookmark,
+  Heart,
+  Rocket,
+  Star,
+  ChevronDown,
 } from "lucide-react";
 
+function LandingPage({ onEnter }: { onEnter: () => void }) {
+  return (
+    <div className="landing-page min-h-screen bg-[#040916] text-white">
+      <header className="landing-topbar">
+        <div className="flex items-center gap-3">
+          <div className="landing-avatar"><Rocket className="h-4 w-4" /></div>
+          <div>
+            <div className="text-sm font-bold tracking-tight">ARES·LUNA</div>
+            <div className="text-[11px] text-slate-500">Planetary analog intelligence</div>
+          </div>
+          <span className="hidden sm:inline text-xs text-slate-400">For NASA Space Apps</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="landing-icon-button" aria-label="Save project"><Heart className="h-4 w-4" /></button>
+          <button className="landing-icon-button" aria-label="Bookmark project"><Bookmark className="h-4 w-4" /></button>
+          <button onClick={onEnter} className="landing-contact-button">Open mission console <ArrowRight className="h-3.5 w-3.5" /></button>
+        </div>
+      </header>
+
+      <main className="landing-main">
+        <section className="landing-hero">
+          <div className="landing-hero-image" />
+          <div className="landing-hero-shade" />
+          <div className="landing-hero-content">
+            <div className="landing-kicker"><span /> THE NEXT ERA OF EXPLORATION</div>
+            <h1>PLANETARY<br /><em>ANALOGS</em></h1>
+            <p>Find the place before you go.</p>
+            <button onClick={onEnter} className="landing-hero-cta">
+              Start exploring <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="landing-hero-meta">
+            <span>01 / 06</span>
+            <span className="landing-line" />
+            <span>Moon · Mars · Earth</span>
+          </div>
+        </section>
+
+        <section className="landing-discovery">
+          <div className="landing-discovery-copy">
+            <div className="landing-kicker"><Star className="h-3 w-3" /> ARES·LUNA FIELD GUIDE</div>
+            <h2>Journey<br /><em>beyond</em></h2>
+            <p>Compare target worlds with real Earth proving grounds, then test the mission before the mission begins.</p>
+            <button onClick={onEnter} className="landing-text-link">Explore the catalogue <ArrowRight className="h-4 w-4" /></button>
+          </div>
+          <div className="landing-destination-grid">
+            <button onClick={onEnter} className="destination-card destination-moon">
+              <span className="destination-orb orb-moon" />
+              <span className="destination-label">THE MOON</span>
+              <strong>Polar<br />Frontier</strong>
+              <ArrowRight className="destination-arrow h-4 w-4" />
+            </button>
+            <button onClick={onEnter} className="destination-card destination-mars">
+              <span className="destination-orb orb-mars" />
+              <span className="destination-label">MARS</span>
+              <strong>Red Planet<br />Expedition</strong>
+              <ArrowRight className="destination-arrow h-4 w-4" />
+            </button>
+            <button onClick={onEnter} className="destination-card destination-earth">
+              <span className="destination-orb orb-earth" />
+              <span className="destination-label">EARTH</span>
+              <strong>Analog<br />Proving Grounds</strong>
+              <ArrowRight className="destination-arrow h-4 w-4" />
+            </button>
+          </div>
+        </section>
+
+        <div className="landing-scroll-cue"><ChevronDown className="h-4 w-4" /> Scroll to discover</div>
+      </main>
+    </div>
+  );
+}
+
 export default function HomePage() {
+  const [hasEntered, setHasEntered] = useState(false);
   const [currentPlanet, setCurrentPlanet] = useState<"Moon" | "Mars">("Moon");
   const [mode, setMode] = useState<"scientific" | "educational">("scientific");
   const [activeTab, setActiveTab] = useState<"explorer" | "analogs" | "simulator" | "benchmarks" | "compare" | "references">("explorer");
@@ -90,10 +170,15 @@ export default function HomePage() {
 
   const siteForModal = candidates.find((c) => c.id === aiModalSiteId) || selectedSite;
 
+  if (!hasEntered) {
+    return <LandingPage onEnter={() => setHasEntered(true)} />;
+  }
+
   return (
-    <div className="min-h-screen bg-space-950 bg-space-grid text-slate-100 flex flex-col">
+    <div className="site-shell min-h-screen bg-space-grid text-slate-100 flex flex-col">
       {/* Navbar */}
       <Navbar
+        onShowWelcome={() => setHasEntered(false)}
         currentPlanet={currentPlanet}
         onSelectPlanet={(p) => {
           if (p !== currentPlanet) {
@@ -110,7 +195,7 @@ export default function HomePage() {
 
       <ServiceStatus />
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-5 sm:px-8 py-8 space-y-8">
         {loading ? (
           <div className="flex flex-col items-center justify-center p-24 gap-3">
             <Loader2 className="w-10 h-10 text-cyan-400 animate-spin" />
@@ -150,29 +235,29 @@ export default function HomePage() {
           /* 3D Explorer & Candidate Roster View */
           <div className="space-y-8">
             {/* Mission-control hero: a large live globe surrounded by operational context. */}
-            <div className="space-y-4">
+            <div className="hero-shell rounded-[2rem] p-5 sm:p-8 lg:p-10 space-y-8">
               <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-400">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    Exploration dashboard / visual reference
+                  <div className="relative z-10 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-sky-300">
+                    <span className="h-2 w-2 rounded-full bg-sky-300 animate-pulse" />
+                    Mission preparation / Earth analog intelligence
                   </div>
-                  <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-white">
-                    {currentPlanet} settlement intelligence
+                  <h1 className="display-font relative z-10 mt-3 max-w-3xl text-5xl sm:text-6xl lg:text-7xl font-medium leading-[0.92] text-slate-100">
+                    Find the place<br /><span className="text-sky-300">before you go.</span>
                   </h1>
-                  <p className="mt-2 max-w-2xl text-sm text-slate-400">
-                    Explore candidate nodes, compare Earth proving grounds, and test whether a
-                    resource budget meets its declared scenario assumptions.
+                  <p className="relative z-10 mt-5 max-w-xl text-sm leading-7 text-[#b3afa7]">
+                    ARES·LUNA turns Moon and Mars site concepts into an evidence-led mission conversation:
+                    explore a target, find the right Earth proving ground, and test a transparent resource budget.
                   </p>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                  <span className="rounded border border-space-700 bg-space-900/80 px-2 py-1">LOCAL SCENARIOS</span>
-                  <span className="rounded border border-emerald-800/60 bg-emerald-950/30 px-2 py-1 text-emerald-300">ILLUSTRATIVE INPUTS</span>
+                <div className="relative z-10 flex items-center gap-2 text-[10px] font-mono text-[#a7a49d]">
+                  <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5">LIVE CATALOGUE</span>
+                  <span className="rounded-full border border-sky-800/70 bg-sky-950/50 px-3 py-1.5 text-sky-300">SCENARIO MODE</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
-                <div className="xl:col-span-9">
+                <div className="relative z-10 xl:col-span-9">
                 <PlanetaryGlobe
                   planet={currentPlanet}
                   sites={candidates}
@@ -182,12 +267,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Selected Site Telemetry & Radar Spider Chart */}
-                <div className="xl:col-span-3 p-5 rounded-2xl cyber-card border border-space-700/80 flex flex-col justify-between">
+                <div className="relative z-10 xl:col-span-3 p-5 rounded-[1.5rem] cyber-card border border-white/10 flex flex-col justify-between">
                 <div>
                   <div className="border-b border-space-700 pb-3 mb-4">
                     <div>
-                      <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
-                        Illustrative scenario inputs & priority radar
+                      <div className="text-[10px] font-mono text-sky-300 uppercase tracking-wider">
+                          {currentPlanet} / candidate telemetry
                       </div>
                       <h3 className="text-lg font-bold text-white">
                         {selectedSite?.name || "Select a Landing Node"}
@@ -274,9 +359,9 @@ export default function HomePage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                    <Orbit className="w-4 h-4 text-cyan-400" />
-                    {currentPlanet} Settlement Candidate Roster
+                  <h3 className="display-font text-2xl font-medium text-slate-100 tracking-tight flex items-center gap-2">
+                  <Orbit className="w-4 h-4 text-sky-300" />
+                  {currentPlanet} candidate roster
                   </h3>
                   <p className="text-xs text-slate-400">
                     Nine exploration scenarios with linked context. No landing approval or safety rating.
@@ -318,8 +403,8 @@ export default function HomePage() {
       )}
 
       {/* Footer */}
-      <footer className="w-full border-t border-space-800/80 bg-space-950 py-6 mt-12 text-xs font-mono text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="w-full border-t border-sky-900/40 bg-[#040916] py-8 mt-12 text-xs font-mono text-slate-500">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span>NASA Space Apps Challenge 2026 · Permanent Moon Base & Mars</span>

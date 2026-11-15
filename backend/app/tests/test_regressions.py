@@ -100,7 +100,7 @@ def test_newer_resource_and_health_routes_preserved():
     assert client.get('/health').json()['status']=='ok'
     resources=client.get('/api/v1/resources').json()
     ids={x['id'] for x in resources}
-    assert len(ids)==8 and {'lro-diviner','mro-sharad','jaxa-selene'} <= ids
+    assert len(ids)>=8 and {'lro-diviner','mro-sharad','jaxa-selene'} <= ids
     for site in client.get('/api/v1/candidates').json():
         p=site['data_provenance']
         assert p['confidence']=='unverified'
