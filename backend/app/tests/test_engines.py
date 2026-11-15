@@ -1,6 +1,9 @@
 from app.scientific_engine.analog_matcher import analog_matcher
 from app.scientific_engine.mcda_scoring import mcda_engine
 from app.scientific_engine.mission_physics import simulator_engine
+from pydantic import ValidationError
+import pytest
+
 from app.models.candidate import MCDAWeights, SimulationParameters
 from app.geospatial_engine.coordinates import haversine_distance, calculate_traverse_difficulty
 
@@ -31,6 +34,24 @@ def test_mission_simulator():
     assert len(summary.daily_telemetry) == 30
     assert summary.mission_viability_score > 0
     print(f"Simulator Passed: Viability score {summary.mission_viability_score}, Status: {summary.status}")
+
+def test_nuclear_only_simulation_has_no_solar_generation():
+    site = analog_matcher.all_candidates["luna-shackleton-rim"]
+    params = SimulationParameters(
+        site_id=site["id"],
+        mission_duration_days=1,
+        crew_size=1,
+        power_system="nuclear_kilopower",
+        nuclear_output_kw=5,
+    )
+
+    summary = simulator_engine.run_simulation(site, params)
+
+    assert summary.daily_telemetry[0].power_generated_kwh == 120.0
+
+def test_simulation_rejects_invalid_duration():
+    with pytest.raises(ValidationError):
+        SimulationParameters(site_id="luna-shackleton-rim", mission_duration_days=0)
 
 def test_geospatial():
     dist = haversine_distance(-89.9, 0.0, -85.99, 2.93, body="Moon")

@@ -16,7 +16,28 @@ def get_all_sites() -> List[dict]:
     with open(mars_path, "r", encoding="utf-8") as f:
         mars = json.load(f)
 
-    return lunar + mars
+    sites = lunar + mars
+    for site in sites:
+        if site["body"].lower() == "moon":
+            sources = [
+                {"id": "lro-diviner", "fields": ["thermal_min_k", "thermal_max_k", "solar_illumination_pct"]},
+                {"id": "lro-lola", "fields": ["elevation_m", "slope_degrees"]},
+                {"id": "nasa-pds", "fields": ["geological_context", "scientific_significance"]},
+            ]
+        else:
+            sources = [
+                {"id": "mro-hirise", "fields": ["geological_context", "slope_degrees", "elevation_m"]},
+                {"id": "mro-crism", "fields": ["geological_context"]},
+                {"id": "mro-sharad", "fields": ["water_ice_probability_pct"]},
+                {"id": "nasa-pds", "fields": ["scientific_significance"]},
+            ]
+        site["data_provenance"] = {
+            "status": "curated_catalogue_values",
+            "confidence": "medium",
+            "note": "Resource families are identified; product-level identifiers and retrieval timestamps are pending ingestion.",
+            "sources": sources,
+        }
+    return sites
 
 @router.get("", response_model=List[CandidateSite])
 def list_candidate_sites(body: Optional[str] = Query(None, description="Filter by 'Moon' or 'Mars'")):

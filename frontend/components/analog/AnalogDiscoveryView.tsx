@@ -51,8 +51,9 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
             Terrestrial Proving Grounds for {site.name} ({site.body})
           </h2>
           <p className="text-sm text-slate-300 mt-1 max-w-3xl">
-            Our machine learning similarity engine computes 5-dimensional environmental vectors to pinpoint Earth&apos;s
-            highest-fidelity analog testing grounds for rover navigation, drilling, and human habitat operations.
+            Our transparent screening engine compares five proxy dimensions to surface Earth environments that can
+            support rover navigation, drilling, and human habitat operations. Similarity is assumption-based until
+            product-level observations are calibrated on a shared scale.
           </p>
         </div>
 
@@ -76,7 +77,7 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
           {/* Match Roster Cards */}
           <div className="lg:col-span-5 space-y-3">
             <div className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2 px-1">
-              Top Ranked Terrestrial Analogs ({analogs.length} Identified)
+              Top Ranked Terrestrial Analogs ({analogs.length} Screened)
             </div>
 
             {analogs.map((item, idx) => {
@@ -144,14 +145,26 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
                   <div className="text-xl font-mono font-extrabold text-cyan-300">
                     {activeAnalog.overall_similarity_pct}%
                   </div>
-                  <div className="text-[10px] uppercase font-mono text-cyan-400">Fidelity Match</div>
+                  <div className="text-[10px] uppercase font-mono text-cyan-400">Proxy Match</div>
+                </div>
+
+                <div className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-4">
+                  <div className="text-xs font-mono font-bold text-amber-300">
+                    Assumption-based comparison · {activeAnalog.confidence || "medium"} confidence
+                  </div>
+                  <ul className="mt-2 space-y-1 text-[11px] leading-relaxed text-slate-400">
+                    {(activeAnalog.limitations || [
+                      "Proxy features are not a calibrated measurement of physical equivalence.",
+                      "Validate candidates against product-level NASA and Earth observation data before mission use.",
+                    ]).map((limitation) => <li key={limitation}>• {limitation}</li>)}
+                  </ul>
                 </div>
               </div>
 
               {/* Sub-Score Breakdown Matrix */}
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
-                  Environmental Dimension Fidelity
+                  Environmental Proxy Dimensions
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
                   <div className="p-3 rounded-xl bg-space-950 border border-space-800">

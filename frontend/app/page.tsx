@@ -12,6 +12,7 @@ import { MissionSimulatorView } from "@/components/simulator/MissionSimulatorVie
 import { MCDARankingView } from "@/components/dashboard/MCDARankingView";
 import { EducationalModeView } from "@/components/educational/EducationalModeView";
 import { AIExplanationModal } from "@/components/explanation/AIExplanationModal";
+import { DataProvenance } from "@/components/data/DataProvenance";
 import { 
   Sparkles, 
   Orbit, 
@@ -170,6 +171,7 @@ export default function HomePage() {
                       <p className="text-xs text-slate-300 leading-relaxed mt-2 p-3 rounded-xl bg-space-950/70 border border-space-850">
                         {selectedSite.scientific_significance}
                       </p>
+                      <DataProvenance site={selectedSite} />
                     </>
                   )}
                 </div>
@@ -210,7 +212,7 @@ export default function HomePage() {
                     {currentPlanet} Settlement Candidate Roster
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Curated NASA LRO / MRO landing sites evaluated for long-duration surface presence.
+                    Curated catalogue candidates mapped to NASA LRO / MRO resource families; product-level validation is shown in provenance.
                   </p>
                 </div>
 

@@ -261,8 +261,20 @@ const FALLBACK_CANDIDATES: CandidateSite[] = [
 ];
 
 function getFallbackCandidates(body?: "Moon" | "Mars"): CandidateSite[] {
-  if (!body) return FALLBACK_CANDIDATES;
-  return FALLBACK_CANDIDATES.filter((c) => c.body.toLowerCase() === body.toLowerCase());
+  const sites = body
+    ? FALLBACK_CANDIDATES.filter((c) => c.body.toLowerCase() === body.toLowerCase())
+    : FALLBACK_CANDIDATES;
+  return sites.map((site) => ({
+    ...site,
+    data_provenance: {
+      status: "offline_demo_catalogue",
+      confidence: "unverified",
+      note: "Backend unavailable. These embedded values are for interface demonstration only.",
+      sources: site.body === "Moon"
+        ? [{ id: "lro-diviner", fields: ["thermal range", "illumination"] }, { id: "lro-lola", fields: ["elevation", "slope"] }]
+        : [{ id: "mro-hirise", fields: ["terrain"] }, { id: "mro-crism", fields: ["mineralogy"] }, { id: "mro-sharad", fields: ["subsurface ice"] }],
+    },
+  }));
 }
 
 const FALLBACK_EARTH_ANALOGS: EarthAnalog[] = [
@@ -443,11 +455,20 @@ function getFallbackAnalogMatches(siteId: string): AnalogMatchResult[] {
 
 function getFallbackMCDARanking(weights: MCDAWeights, body?: "Moon" | "Mars"): MCDARankResult[] {
   const sites = getFallbackCandidates(body);
-  return sites.map((s, idx) => ({
+  const scoreFor = (s: CandidateSite) => (
+    s.solar_illumination_pct * weights.illumination +
+    s.water_ice_probability_pct * weights.water_ice +
+    Math.max(10, 100 - s.slope_degrees * 4.5) * weights.slope_trafficability +
+    s.earth_visibility_pct * weights.earth_communication +
+    s.natural_radiation_shielding_pct * weights.radiation_shielding +
+    Math.max(10, 100 - Math.abs(s.thermal_max_k - s.thermal_min_k) / 2.5) * weights.thermal_stability
+  );
+  const ranked = [...sites].sort((a, b) => scoreFor(b) - scoreFor(a));
+  return ranked.map((s, idx) => ({
     site_id: s.id,
     site_name: s.name,
     body: s.body,
-    closeness_score: Number((0.88 - idx * 0.08).toFixed(4)),
+    closeness_score: Number((scoreFor(s) / 100).toFixed(4)),
     rank: idx + 1,
     dimension_scores: {
       illumination: s.solar_illumination_pct,
@@ -467,16 +488,23 @@ function generateFallbackSimulation(params: SimulationParameters): SimulationSum
   let water = params.crew_size * 3.5 * 14;
   let o2 = params.crew_size * 0.84 * 14;
   let rad = 0;
+  let powerGenerated = 0;
+  let oxygenShortage = false;
+  let waterShortage = false;
   
   for (let d = 1; d <= params.mission_duration_days; d++) {
     const dailyWaterISRU = (params.isru_excavation_rate_kg_day / 1000) * 45;
-    water = water - params.crew_size * 3.5 * (1 - params.water_recycling_efficiency) + dailyWaterISRU;
-    o2 = o2 - params.crew_size * 0.84 + dailyWaterISRU * 0.88;
+    const oxygenProduced = Math.min(params.crew_size * 0.84 * 1.1, dailyWaterISRU * 0.88);
+    const waterForOxygen = oxygenProduced / 0.88;
+    water = water - params.crew_size * 3.5 * (1 - params.water_recycling_efficiency) + dailyWaterISRU - waterForOxygen;
+    o2 = o2 - params.crew_size * 0.84 + oxygenProduced;
+    if (water <= 0) waterShortage = true;
+    if (o2 <= 0) oxygenShortage = true;
     rad += 0.25 * Math.exp(-params.radiation_habitat_burial_depth_m * 1.5);
 
     telemetry.push({
       day: d,
-      power_generated_kwh: 340 + Math.sin(d / 5) * 40,
+      power_generated_kwh: params.power_system === "nuclear_kilopower" ? params.nuclear_output_kw * 24 : 340 + Math.sin(d / 5) * 40,
       power_consumed_kwh: params.crew_size * 52.8 + 45,
       battery_charge_pct: Math.min(100, Math.max(45, 92 - Math.sin(d / 4) * 20)),
       water_stored_liters: Math.round(water),
@@ -487,15 +515,18 @@ function generateFallbackSimulation(params: SimulationParameters): SimulationSum
     });
   }
 
+  const viability = Math.max(5, 87.5 - (oxygenShortage ? 45 : 0) - (waterShortage ? 40 : 0));
   return {
-    mission_viability_score: 87.5,
-    status: "NOMINAL",
-    total_power_generated_mwh: 12.8,
-    total_water_extracted_isru_liters: 1350.0,
+    mission_viability_score: viability,
+    status: viability >= 80 ? "NOMINAL" : viability >= 55 ? "MARGINAL" : "CRITICAL",
+    total_power_generated_mwh: Number((telemetry.reduce((sum, day) => sum + day.power_generated_kwh, 0) / 1000).toFixed(2)),
+    total_water_extracted_isru_liters: Number((params.isru_excavation_rate_kg_day / 1000 * 45 * params.mission_duration_days).toFixed(1)),
     final_cumulative_radiation_msv: Number(rad.toFixed(2)),
-    bottlenecks: ["No critical resource exhaustion encountered."],
-    recommendations: ["Maintain regolith burial depth >= 1.5m to keep cumulative dose below 50 mSv."],
+    bottlenecks: oxygenShortage ? ["Oxygen reserve exhausted during the offline demo timeline."] : waterShortage ? ["Water reserve exhausted during the offline demo timeline."] : ["Offline demo result; backend physics engine was unavailable."],
+    recommendations: oxygenShortage ? ["Increase oxygen production or imported reserve before accepting this mission profile."] : ["Start the backend for the authoritative physics result."],
     daily_telemetry: telemetry,
+    execution_mode: "offline_demo",
+    warnings: ["Backend unavailable: this is an offline demo calculation, not the authoritative mission result."],
   };
 }
 
@@ -508,10 +539,10 @@ function generateFallbackAIExplanation(siteId: string, audienceMode: string): AI
     headline: audienceMode === "educational" 
       ? `How ${site.name} Can Become a Thriving Outpost on the ${site.body}`
       : `Scientific Evaluation & Analog Mapping: ${site.name}`,
-    suitability_verdict: `High-value candidate combining ${site.solar_illumination_pct}% solar power with direct access to frozen water ice reservoirs.`,
-    geological_narrative: `${site.geological_context} Topographic slopes of ${site.slope_degrees}° fall within rover traction tolerances.`,
+    suitability_verdict: `Screening candidate with ${site.solar_illumination_pct}% catalogue solar access and ${site.water_ice_probability_pct}% catalogue water-ice probability. Validate these values against product-level observations.`,
+    geological_narrative: `${site.geological_context} This offline briefing uses the embedded catalogue and is not a live model output.`,
     engineering_challenges: site.hazards,
-    earth_analog_parallels: `Fidelity tested at Haughton Impact Crater (Devon Island) and HI-SEAS with high operational correlation.`,
+    earth_analog_parallels: `Proxy comparison references Haughton Impact Crater and HI-SEAS; this is assumption-based and not a calibrated fidelity measurement.`,
     educational_takeaways: [
       "Sunlight + Ice + Shielding = Survival in Deep Space.",
       "Testing rovers and suits in Earth's extreme deserts prevents disastrous mistakes on other worlds.",

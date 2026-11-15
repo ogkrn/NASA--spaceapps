@@ -13,7 +13,7 @@
 
 ## 🚀 Concept Overview
 
-ARES-LUNA bridges the gap between deep planetary science and accessible educational decision-making. By combining multi-criteria scientific decision analysis with advanced automated terrestrial analog matching, 3D visualization, and dynamic mission life-support simulation, the platform provides mission planners and hackathon judges with a comprehensive settlement evaluation suite.
+ARES-LUNA bridges the gap between deep planetary science and accessible educational decision-making. By combining multi-criteria scientific decision analysis with transparent terrestrial analog screening, 3D visualization, and dynamic mission life-support simulation, the platform provides mission planners and hackathon judges with an evidence-aware settlement evaluation suite. Catalogue values are labelled as screening values until product-level ingestion and uncertainty metadata are attached.
 
 ### Key Capabilities:
 - **Intermediate-Level Scientific Comparison**: TOPSIS (*Technique for Order of Preference by Similarity to Ideal Solution*) multi-criteria evaluation across 6 critical planetary engineering vectors (Illumination, Water-Ice Confidence, Terrain Slope Trafficability, Direct-to-Earth Line of Sight, Natural Radiation Shielding, Thermal Delta).
@@ -195,16 +195,29 @@ ALL SCIENTIFIC ENGINE UNIT TESTS PASSED!
 ## 🛰️ Data Sources & References
 
 1. **NASA Lunar Reconnaissance Orbiter (LRO)**:
-   - Diviner Lunar Radiometer Experiment (Thermal Stability & PSRs)
-   - LOLA (Lunar Orbiter Laser Altimeter DEM & Slopes)
+   - Diviner Lunar Radiometer Experiment (thermal context and PSRs)
+   - LOLA (Lunar Orbiter Laser Altimeter DEM and slope context)
 2. **NASA Mars Reconnaissance Orbiter (MRO)**:
    - HiRISE (High Resolution Imaging Science Experiment)
    - CRISM (Compact Reconnaissance Imaging Spectrometer for Mars)
    - SHARAD (Shallow Subsurface Radar)
-3. **Terrestrial Analogs**:
+3. **Official NASA resource families used by the prototype**:
+   - [NASA Earthdata](https://www.earthdata.nasa.gov/)
+   - [NASA Planetary Data System](https://pds.nasa.gov/)
+   - [LRO Diviner products](https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=DIVINER)
+   - [LRO LOLA products](https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=LOLA)
+   - [MRO HiRISE](https://hirise.lpl.arizona.edu/)
+   - [MRO CRISM](https://crism.jhuapl.edu/)
+   - [MRO SHARAD](https://mars.nasa.gov/mro/mission/instruments/sharad/)
+4. **Terrestrial analog campaigns**:
    - NASA Haughton-Mars Project (HMP), Devon Island, Canada
    - HI-SEAS (Hawaii Space Exploration Analog and Simulation), Mauna Loa, USA
    - Atacama Desert (Life in the Atacama - LITA), Chile
    - Arctic Mars Analog Svalbard Expedition (AMASE), Norway
    - ESA PANGAEA Astronaut Geological Training, Lanzarote, Spain
    - McMurdo Dry Valleys, Antarctica
+
+The backend exposes these references at `GET /api/v1/resources`. Each candidate response includes a
+`data_provenance` object describing the resource family, fields, confidence, and whether values are
+catalogue references or product-level measurements. The ingestion validation script intentionally does
+not claim to download NASA products until product identifiers and retrieval timestamps are persisted.

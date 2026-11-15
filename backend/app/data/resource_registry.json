@@ -1,0 +1,74 @@
+[
+  {
+    "id": "nasa-earthdata",
+    "name": "NASA Earthdata",
+    "organization": "NASA",
+    "url": "https://www.earthdata.nasa.gov/",
+    "role": "Earth observation, climate, terrain, and analog-environment datasets",
+    "use_in_app": "Earth analog discovery and environmental context",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "nasa-pds",
+    "name": "NASA Planetary Data System",
+    "organization": "NASA",
+    "url": "https://pds.nasa.gov/",
+    "role": "Long-term archive for planetary mission products",
+    "use_in_app": "Planetary data provenance and product identifiers",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "lro-diviner",
+    "name": "Lunar Reconnaissance Orbiter - Diviner",
+    "organization": "NASA",
+    "url": "https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=DIVINER",
+    "role": "Lunar surface temperature and thermophysical observations",
+    "use_in_app": "Thermal range and permanently shadowed region context",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "lro-lola",
+    "name": "Lunar Reconnaissance Orbiter - LOLA",
+    "organization": "NASA",
+    "url": "https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=LOLA",
+    "role": "Lunar laser altimetry and elevation products",
+    "use_in_app": "Elevation, slope, and terrain screening",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "mro-hirise",
+    "name": "Mars Reconnaissance Orbiter - HiRISE",
+    "organization": "NASA",
+    "url": "https://hirise.lpl.arizona.edu/",
+    "role": "High-resolution Mars surface imagery",
+    "use_in_app": "Mars terrain and geological context",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "mro-crism",
+    "name": "Mars Reconnaissance Orbiter - CRISM",
+    "organization": "NASA",
+    "url": "https://crism.jhuapl.edu/",
+    "role": "Mars mineralogical and spectral observations",
+    "use_in_app": "Mineralogy and alteration-context screening",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "mro-sharad",
+    "name": "Mars Reconnaissance Orbiter - SHARAD",
+    "organization": "NASA",
+    "url": "https://mars.nasa.gov/mro/mission/instruments/sharad/",
+    "role": "Subsurface radar observations",
+    "use_in_app": "Subsurface ice and buried-layer context",
+    "status": "catalogue-reference"
+  },
+  {
+    "id": "jaxa-selene",
+    "name": "JAXA SELENE / Kaguya data archive",
+    "organization": "JAXA",
+    "url": "https://darts.isas.jaxa.jp/planet/pdap/selene/",
+    "role": "Supplementary lunar observation archive",
+    "use_in_app": "Supplementary lunar topography and surface context",
+    "status": "supplementary"
+  }
+]

@@ -40,23 +40,35 @@ def generate_ai_explanation(req: AIExplanationRequest):
     matched_analogs = analog_matcher.find_best_analogs_for_site(req.site_id, top_k=1)
     top_analog = matched_analogs[0] if matched_analogs else None
     analog_mention = (
-        f"Analogous conditions have been rigorously simulated at {top_analog.analog_name} ({top_analog.location}), "
-        f"matching with a {top_analog.overall_similarity_pct}% fidelity profile."
+        f"The screening comparison identifies {top_analog.analog_name} ({top_analog.location}) as a "
+        f"{top_analog.overall_similarity_pct}% proxy match; this is not a calibrated physical-equivalence claim."
         if top_analog else "No direct analog available."
     )
 
     if req.audience_mode == "educational":
         headline = f"Why {site_name} Could Be Humanity's Next Home on {body}"
-        verdict = (
-            f"A high-potential settlement candidate offering {round(illum)}% solar power access "
-            f"and critical water ice proximity, balanced by extreme thermal cold and steep crater walls."
-        )
-        narrative = (
-            f"Imagine standing on the rim of {site_name}. The sun hovers perpetually just above the jagged horizon, "
-            f"casting shadows that stretch for miles into darkness. Inside those shadowy hollows lies frozen water ice "
-            f"that has remained undisturbed for billions of years—water that future astronauts can drink, breathe as oxygen, "
-            f"and split into rocket fuel to travel deeper into the cosmos."
-        )
+        if body == "Moon":
+            verdict = (
+                f"Screening result: {site_name} combines {round(illum)}% catalogue solar-illumination access "
+                f"with a {round(ice_prob)}% catalogue estimate for water-ice probability. These values require "
+                "product-level validation before mission use."
+            )
+            narrative = (
+                f"{site_name} is a lunar candidate in the current catalogue. Its illumination and thermal values "
+                "are attributed to the LRO Diviner/LOLA resource families; the interface presents them as "
+                "screening evidence rather than a confirmed landing-site measurement."
+            )
+        else:
+            verdict = (
+                f"Screening result: {site_name} is evaluated using {round(illum)}% catalogue solar access and "
+                f"{round(ice_prob)}% catalogue subsurface-ice confidence. These values require product-level "
+                "validation before mission use."
+            )
+            narrative = (
+                f"{site_name} is a Mars candidate in the current catalogue. Terrain and mineralogy context are "
+                "associated with MRO HiRISE/CRISM resource families, while subsurface-ice context is associated "
+                "with MRO SHARAD. The result is a transparent screening explanation, not a confirmed resource estimate."
+            )
         challenges = [
             f"Bitter cold: Temperatures drop as low as {site['thermal_min_k']} K (-{round(273.15 - site['thermal_min_k'])}°C), brittle enough to snap ordinary steel.",
             f"Steep slopes ({slope}°): Rover navigation requires traction spikes and autonomous descent winches.",
@@ -74,9 +86,9 @@ def generate_ai_explanation(req: AIExplanationRequest):
             f"and volatile resource access ({ice_prob}% confidence). Earth link duty cycle is {comm}%."
         )
         narrative = (
-            f"{site_name} satisfies NASA Artemis / Mars Architecture requirements for early infrastructure deployment. "
-            f"Topography at {elevation}m elevation provides elevated telecommunications visibility while maintaining "
-            f"short-baseline rover access to volatile-rich cold traps."
+            f"{site_name} is a catalogue candidate with elevation {elevation} m, {illum}% solar access, and "
+            f"{ice_prob}% estimated volatile access. The values support trade-off discussion; they do not by "
+            "themselves establish compliance with a NASA architecture requirement."
         )
         challenges = site["hazards"]
         takeaways = [
@@ -92,9 +104,9 @@ def generate_ai_explanation(req: AIExplanationRequest):
             f"a primary scientific anchor for long-duration surface presence."
         )
         narrative = (
-            f"{site['geological_context']} Spectroscopic and radar telemetry confirm {ice_prob}% confidence "
-            f"in shallow subsurface volatiles. Slope morphology of {slope}° is within the static stability envelope "
-            f"of lunar mobility systems (LTV/FPR), though localized scree fields necessitate cautious path planning."
+            f"{site['geological_context']} The current catalogue assigns {ice_prob}% confidence to water-ice "
+            f"availability and a slope of {slope}°. These are source-family-linked screening values; product "
+            "identifiers, uncertainty ranges, and independent validation should be attached before operational use."
         )
         challenges = site["hazards"]
         takeaways = [

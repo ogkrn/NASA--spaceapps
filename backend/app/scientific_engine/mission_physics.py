@@ -50,6 +50,7 @@ class MissionSimulatorEngine:
         total_water_isru_liters = 0.0
 
         water_shortage_detected = False
+        oxygen_shortage_detected = False
         power_blackout_detected = False
         excessive_radiation_detected = False
 
@@ -75,7 +76,11 @@ class MissionSimulatorEngine:
             # Power Generation (kWh/day)
             solar_pv_efficiency = 0.28
             # kWh = W/m2 * m2 * eff * diurnal_factor * 24h / 1000
-            solar_power_kwh = (solar_flux * params.solar_panel_area_m2 * solar_pv_efficiency * diurnal_factor * 24.0) / 1000.0
+            solar_power_kwh = (
+                (solar_flux * params.solar_panel_area_m2 * solar_pv_efficiency * diurnal_factor * 24.0) / 1000.0
+                if params.power_system in ["solar_battery", "hybrid"]
+                else 0.0
+            )
 
             nuclear_power_kwh = params.nuclear_output_kw * 24.0 if params.power_system in ["nuclear_kilopower", "hybrid"] else 0.0
 
@@ -107,28 +112,32 @@ class MissionSimulatorEngine:
             # Water and Oxygen loop balance
             recycled_water = daily_crew_water_consumption * params.water_recycling_efficiency
             net_crew_water_loss = daily_crew_water_consumption - recycled_water
+            oxygen_consumed = daily_crew_oxygen_consumption
             
             # ISRU addition (only if sufficient power available)
             daily_isru_water = potential_daily_isru_water if battery_pct > 20 else 0.0
             total_water_isru_liters += daily_isru_water
             
-            water_stored = water_stored - net_crew_water_loss + daily_isru_water
+            # Water used for electrolysis is not available for potable reserve.
+            potential_oxygen = daily_isru_water * 0.88
+            oxygen_regenerated = min(oxygen_consumed * 1.1, potential_oxygen)
+            water_for_oxygen = oxygen_regenerated / 0.88 if oxygen_regenerated else 0.0
+            water_stored = water_stored - net_crew_water_loss + daily_isru_water - water_for_oxygen
             if water_stored <= 0:
                 water_stored = 0
                 water_shortage_detected = True
 
             # Oxygen balance (electrolysis of water or ilmenite)
-            oxygen_consumed = daily_crew_oxygen_consumption
-            oxygen_regenerated = daily_isru_water * 0.88 # O2 fraction from H2O electrolysis
             oxygen_stored = oxygen_stored - oxygen_consumed + min(oxygen_consumed * 1.1, oxygen_regenerated)
             if oxygen_stored < 0:
                 oxygen_stored = 0
+                oxygen_shortage_detected = True
 
             # Radiation accumulation
             # Random Solar Particle Event (SPE) probability check
             spe_spike = 4.5 * (1.0 - effective_shielding) if day in [14, 42] else 0.0
             cumulative_radiation += (daily_radiation_dose + spe_spike)
-            if cumulative_radiation > 100.0: # NASA career guideline warning threshold (100 mSv)
+            if cumulative_radiation > 100.0:
                 excessive_radiation_detected = True
 
             # Stress index calculation (0-100)
@@ -161,6 +170,8 @@ class MissionSimulatorEngine:
             viability -= 35.0
         if water_shortage_detected:
             viability -= 40.0
+        if oxygen_shortage_detected:
+            viability -= 45.0
         if excessive_radiation_detected:
             viability -= 20.0
         
@@ -190,9 +201,20 @@ class MissionSimulatorEngine:
             bottlenecks.append("Negative water balance: ISRU extraction rate insufficient to offset non-recycled metabolic loss.")
             recommendations.append("Upgrade closed-loop water recovery to >= 95% efficiency (ECLSS upgrade) or increase regolith mining tonnage.")
 
+        if oxygen_shortage_detected:
+            bottlenecks.append("Oxygen reserve exhausted during the simulated timeline.")
+            recommendations.append(
+                "Increase oxygen production capacity or imported reserve; the current configuration is not viable for this duration."
+            )
+
         if cumulative_radiation > 60.0:
-            bottlenecks.append(f"Elevated radiation exposure ({round(cumulative_radiation, 1)} mSv) exceeds optimal ALARA guidelines.")
-            recommendations.append(f"Increase habitat regolith burial depth to >= 2.5 meters or relocate crew quarters into lava tube voids.")
+            bottlenecks.append(
+                f"Project-defined radiation review level exceeded ({round(cumulative_radiation, 1)} mSv); "
+                "this is not a universal NASA career limit."
+            )
+            recommendations.append(
+                "Review habitat shielding with a radiation specialist and compare against mission-specific NASA limits."
+            )
 
         if not bottlenecks:
             bottlenecks.append("No critical system failures encountered during simulated mission timeline.")
@@ -207,6 +229,11 @@ class MissionSimulatorEngine:
             bottlenecks=bottlenecks,
             recommendations=recommendations,
             daily_telemetry=daily_telemetry
+            ,execution_mode="server"
+            ,warnings=[
+                "Radiation review levels are project assumptions; compare against mission-specific NASA limits.",
+                "Catalogue resource values require product-level validation before operational decisions.",
+            ]
         )
 
 simulator_engine = MissionSimulatorEngine()

@@ -118,7 +118,14 @@ class AnalogMatcherEngine:
                     thermal_score=therm_score,
                     volatiles_score=vol_score,
                     scientific_rationale=rationale,
-                    key_analog_activities=analog["nasa_mission_testing"]
+                    key_analog_activities=analog["nasa_mission_testing"],
+                    comparison_status="assumption_based",
+                    confidence="medium",
+                    limitations=[
+                        "Earth analog profile values are catalogue estimates, not a shared calibrated measurement scale.",
+                        "Slope, regolith mechanics, thermal extremes, and geology are compared through proxy features.",
+                        "This ranking is a screening aid, not proof that the sites are physically equivalent.",
+                    ],
                 )
             )
 

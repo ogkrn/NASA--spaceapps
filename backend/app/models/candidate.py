@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Literal
 
 class ISRUPotential(BaseModel):
     water_extraction_rate_kg_per_ton: float = Field(..., description="Estimated water extractable per metric ton of regolith")
@@ -7,6 +8,7 @@ class ISRUPotential(BaseModel):
     solar_flux_w_m2: float = Field(..., description="Mean incident solar flux at surface")
 
 class CandidateSite(BaseModel):
+    model_config = ConfigDict(extra="allow")
     id: str
     name: str
     body: str = Field(..., description="'Moon' or 'Mars'")
@@ -64,14 +66,17 @@ class AnalogMatchResult(BaseModel):
     volatiles_score: float
     scientific_rationale: str
     key_analog_activities: List[str]
+    comparison_status: str = "assumption_based"
+    confidence: str = "medium"
+    limitations: List[str] = Field(default_factory=list)
 
 class MCDAWeights(BaseModel):
-    illumination: float = 0.25
-    water_ice: float = 0.25
-    slope_trafficability: float = 0.15
-    earth_communication: float = 0.15
-    radiation_shielding: float = 0.10
-    thermal_stability: float = 0.10
+    illumination: float = Field(0.25, ge=0, le=1)
+    water_ice: float = Field(0.25, ge=0, le=1)
+    slope_trafficability: float = Field(0.15, ge=0, le=1)
+    earth_communication: float = Field(0.15, ge=0, le=1)
+    radiation_shielding: float = Field(0.10, ge=0, le=1)
+    thermal_stability: float = Field(0.10, ge=0, le=1)
 
 class MCDARankResult(BaseModel):
     site_id: str
@@ -85,15 +90,15 @@ class MCDARankResult(BaseModel):
 
 class SimulationParameters(BaseModel):
     site_id: str
-    mission_duration_days: int = 60
-    crew_size: int = 4
-    power_system: str = "hybrid" # "solar_battery", "nuclear_kilopower", "hybrid"
-    solar_panel_area_m2: float = 350.0
-    nuclear_output_kw: float = 10.0
-    battery_capacity_kwh: float = 400.0
-    water_recycling_efficiency: float = 0.90
-    isru_excavation_rate_kg_day: float = 250.0
-    radiation_habitat_burial_depth_m: float = 1.5
+    mission_duration_days: int = Field(60, ge=1, le=3650)
+    crew_size: int = Field(4, ge=1, le=20)
+    power_system: Literal["hybrid", "solar_battery", "nuclear_kilopower"] = "hybrid"
+    solar_panel_area_m2: float = Field(350.0, ge=0, le=100000)
+    nuclear_output_kw: float = Field(10.0, ge=0, le=1000)
+    battery_capacity_kwh: float = Field(400.0, gt=0, le=100000)
+    water_recycling_efficiency: float = Field(0.90, ge=0, le=1)
+    isru_excavation_rate_kg_day: float = Field(250.0, ge=0, le=100000)
+    radiation_habitat_burial_depth_m: float = Field(1.5, ge=0, le=20)
 
 class SimulationDayTelemetry(BaseModel):
     day: int
@@ -115,6 +120,8 @@ class SimulationSummary(BaseModel):
     bottlenecks: List[str]
     recommendations: List[str]
     daily_telemetry: List[SimulationDayTelemetry]
+    execution_mode: Literal["server", "offline_demo"] = "server"
+    warnings: List[str] = Field(default_factory=list)
 
 class AIExplanationRequest(BaseModel):
     site_id: str

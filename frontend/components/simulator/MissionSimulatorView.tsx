@@ -264,6 +264,16 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
         <div className="lg:col-span-7 space-y-6">
           {summary ? (
             <>
+              {summary.execution_mode === "offline_demo" && (
+                <div className="rounded-xl border border-amber-700 bg-amber-950/60 p-3 text-xs text-amber-200">
+                  Backend unavailable: showing an offline demo calculation. Start FastAPI for the authoritative result.
+                </div>
+              )}
+              {summary.warnings?.map((warning) => (
+                <div key={warning} className="rounded-xl border border-space-700 bg-space-950/70 p-3 text-xs text-slate-400">
+                  {warning}
+                </div>
+              ))}
               {/* Scorecard Hero */}
               <div className="p-6 rounded-2xl cyber-card border border-space-700/80 bg-space-900/80">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">

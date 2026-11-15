@@ -24,6 +24,12 @@ export interface CandidateSite {
   hazards: string[];
   scientific_significance: string;
   recommended_analog_type: string;
+  data_provenance?: {
+    status: string;
+    confidence: string;
+    note: string;
+    sources: { id: string; fields: string[] }[];
+  };
 }
 
 export interface EarthAnalog {
@@ -63,6 +69,9 @@ export interface AnalogMatchResult {
   volatiles_score: number;
   scientific_rationale: string;
   key_analog_activities: string[];
+  comparison_status?: string;
+  confidence?: string;
+  limitations?: string[];
 }
 
 export interface MCDAWeights {
@@ -126,6 +135,8 @@ export interface SimulationSummary {
   bottlenecks: string[];
   recommendations: string[];
   daily_telemetry: SimulationDayTelemetry[];
+  execution_mode?: "server" | "offline_demo";
+  warnings?: string[];
 }
 
 export interface AIExplanationResponse {

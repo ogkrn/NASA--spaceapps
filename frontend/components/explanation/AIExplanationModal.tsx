@@ -61,7 +61,7 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            AI Planetary Intelligence Engine · Multi-Criteria Synthesis
+            Evidence-Based Planetary Briefing · Multi-Criteria Synthesis
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
             {site.name} ({site.body})
@@ -109,6 +109,11 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
             <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-800/60">
               <h3 className="text-base font-bold text-cyan-200 mb-1">{explanation.headline}</h3>
               <p className="text-xs text-slate-300 leading-relaxed">{explanation.suitability_verdict}</p>
+            </div>
+            <div className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-3 text-[11px] leading-relaxed text-amber-200">
+              This briefing is generated from the curated catalogue and NASA resource families shown in the
+              site&apos;s provenance panel. It is not a live AI model output and does not replace product-level
+              scientific validation.
             </div>
 
             {/* Geological Narrative */}

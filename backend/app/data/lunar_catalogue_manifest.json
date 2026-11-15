@@ -1,0 +1,13 @@
+{
+  "dataset": "lunar_sites.json",
+  "status": "validated_curated_catalogue",
+  "record_count": 5,
+  "resource_families": [
+    "lro-diviner",
+    "lro-lola",
+    "nasa-pds"
+  ],
+  "product_identifiers": [],
+  "retrieved_at": null,
+  "note": "No remote download is performed by this validation script."
+}
