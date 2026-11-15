@@ -43,9 +43,21 @@ Production frontend: `npm run build` then `npm start` inside `frontend`. Never r
 
 Optional container configuration: `docker compose up --build`. Docker execution was not available during this repair; this path is not runtime-verified. Ports bind to localhost. The previous unused PostGIS service is omitted because no application code queried it.
 
-## Deploy with Render and Vercel
+## Deploy with Railway and Vercel
 
-The repository includes [`render.yaml`](./render.yaml) for the FastAPI service. In Render, create a Blueprint from this repository, or create a Docker web service with:
+For Railway, create a service from this repository and set its **Root Directory** to `backend`. Railway will use [`backend/Dockerfile`](./backend/Dockerfile). The container now listens on Railway's injected `PORT` value.
+
+Railway settings:
+
+- Service root directory: `backend`
+- Builder: Dockerfile
+- Health check path: `/health`
+- Public networking: Generate a domain
+- `CORS_ORIGINS`: JSON array containing the final Vercel URL, for example `["https://your-project.vercel.app"]`
+
+The previous Render Blueprint remains available in [`render.yaml`](./render.yaml) if you change providers.
+
+For Render, create a Blueprint from this repository, or create a Docker web service with:
 
 - Dockerfile: `backend/Dockerfile`
 - Docker context: `backend`
