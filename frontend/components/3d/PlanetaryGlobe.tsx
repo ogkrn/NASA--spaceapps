@@ -54,14 +54,14 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
     const starField = new THREE.Points(starsGeo, starsMat);
     scene.add(starField);
 
-    // 3. Procedural Planet Texture
+    // 3. Deterministic fallback texture, replaced by a real planetary map when available.
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = 512;
     const ctx = canvas.getContext("2d");
     if (ctx) {
       if (isMoon) {
-        // Moon procedural cratered texture
+        // Moon fallback texture
         ctx.fillStyle = "#8a94a6";
         ctx.fillRect(0, 0, 1024, 512);
         
@@ -93,7 +93,7 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
           ctx.fill();
         }
       } else {
-        // Mars procedural ochre/rust texture
+        // Mars fallback texture
         ctx.fillStyle = "#c2410c";
         ctx.fillRect(0, 0, 1024, 512);
 
@@ -118,18 +118,38 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
       }
     }
 
-    const planetTexture = new THREE.CanvasTexture(canvas);
+    const fallbackTexture = new THREE.CanvasTexture(canvas);
+    const textureUrl = isMoon
+      ? "https://threejs.org/examples/textures/planets/moon_1024.jpg"
+      : "https://threejs.org/examples/textures/planets/mars_1k_color.jpg";
 
     // 4. Planet Mesh
     const planetRadius = 1.25;
     const sphereGeo = new THREE.SphereGeometry(planetRadius, 64, 64);
     const sphereMat = new THREE.MeshStandardMaterial({
-      map: planetTexture,
+      map: fallbackTexture,
       roughness: 0.85,
       metalness: 0.05,
     });
     const planetMesh = new THREE.Mesh(sphereGeo, sphereMat);
     scene.add(planetMesh);
+
+    const textureLoader = new THREE.TextureLoader();
+    let remoteTexture: THREE.Texture | null = null;
+    textureLoader.load(
+      textureUrl,
+      (texture) => {
+        remoteTexture = texture;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        sphereMat.map = texture;
+        sphereMat.needsUpdate = true;
+      },
+      undefined,
+      () => {
+        // Keep the deterministic fallback when the external texture is unavailable.
+      },
+    );
 
     // 5. Atmosphere Glow Ring
     const atmosphereGeo = new THREE.SphereGeometry(planetRadius * 1.025, 32, 32);
@@ -187,6 +207,24 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
     });
 
     scene.add(markerGroup);
+
+    // Mission-control orbital tracks make the globe read as a live operations view.
+    const orbitGroup = new THREE.Group();
+    [1.52, 1.68].forEach((radius, index) => {
+      const orbitCurve = new THREE.EllipseCurve(0, 0, radius, radius * (index ? 0.64 : 0.82), 0, Math.PI * 2);
+      const orbitPoints = orbitCurve.getPoints(128).map((point) => new THREE.Vector3(point.x, 0, point.y));
+      const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+      const orbitMaterial = new THREE.LineBasicMaterial({
+        color: isMoon ? 0x67e8f9 : 0xfb923c,
+        transparent: true,
+        opacity: index ? 0.28 : 0.48,
+      });
+      const orbit = new THREE.Line(orbitGeometry, orbitMaterial);
+      orbit.rotation.x = index ? 0.62 : 0.3;
+      orbit.rotation.z = index ? -0.28 : 0.18;
+      orbitGroup.add(orbit);
+    });
+    scene.add(orbitGroup);
 
     // 7. Lighting
     const ambientLight = new THREE.AmbientLight(0x334155, 1.2);
@@ -278,6 +316,7 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
       if (!isDragging) {
         planetMesh.rotation.y += rotationVelocityX;
         markerGroup.rotation.y += rotationVelocityX;
+        orbitGroup.rotation.y -= rotationVelocityX * 0.35;
       }
 
       renderer.render(scene, camera);
@@ -294,21 +333,36 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
       if (currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
+      fallbackTexture.dispose();
+      remoteTexture?.dispose();
+      orbitGroup.traverse((object) => {
+        if (object instanceof THREE.Line) {
+          object.geometry.dispose();
+          (object.material as THREE.Material).dispose();
+        }
+      });
+      sphereGeo.dispose();
+      sphereMat.dispose();
       renderer.dispose();
     };
   }, [planet, sites, selectedSiteId, isMoon, onSelectSite]);
 
   return (
-    <div className="relative w-full h-[460px] rounded-2xl overflow-hidden cyber-card border border-space-700/60 bg-gradient-to-b from-space-950 via-space-900 to-space-950 flex flex-col">
+    <div className="relative w-full h-[600px] rounded-2xl overflow-hidden cyber-card border border-space-700/60 bg-gradient-to-b from-black via-space-950 to-space-950 flex flex-col">
       {/* 3D Header Overlay */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-space-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-space-700 text-xs font-mono text-slate-300">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-        <span>Interactive 3D {planet} Globe</span>
-        <span className="text-slate-500">| Drag to Orbit · Click Landing Nodes</span>
+        <span>LIVE {planet.toUpperCase()} ORBITAL VIEW</span>
+        <span className="text-slate-500">| Drag to rotate · Click nodes</span>
       </div>
 
-      <div className="absolute bottom-4 left-4 z-10 text-[11px] font-mono text-slate-400 bg-space-950/80 px-2.5 py-1 rounded border border-space-800">
-        Solar Irradiance: {isMoon ? "1361 W/m²" : "590 W/m²"} · Sub-solar Terminator Active
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-2 text-[10px] font-mono text-slate-300 bg-black/60 px-2.5 py-1 rounded border border-space-800">
+        <span className={`w-1.5 h-1.5 rounded-full ${isMoon ? "bg-cyan-400" : "bg-orange-400"} animate-pulse`} />
+        REAL PLANET MAP · VISUAL REFERENCE
+      </div>
+
+      <div className="absolute bottom-4 left-4 z-10 text-[11px] font-mono text-slate-400 bg-black/70 px-2.5 py-1 rounded border border-space-800">
+        Solar irradiance: {isMoon ? "1361 W/m²" : "590 W/m²"} · {sites.length} tracked nodes · Orbit tracks active
       </div>
 
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />

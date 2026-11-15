@@ -22,7 +22,10 @@ import {
   Sun, 
   Layers, 
   Cpu, 
-  Loader2 
+  Loader2,
+  Activity,
+  MapPin,
+  ArrowUpRight
 } from "lucide-react";
 
 export default function HomePage() {
@@ -132,38 +135,79 @@ export default function HomePage() {
         ) : (
           /* 3D Explorer & Candidate Roster View */
           <div className="space-y-8">
-            {/* Top Interactive Hero Section: 3D Globe + Radar Evaluation */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* 3D Globe Visualizer (7 cols) */}
-              <div className="lg:col-span-7">
+            {/* Mission-control hero: a large live globe surrounded by operational context. */}
+            <div className="space-y-4">
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-400">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Mission control / live planetary view
+                  </div>
+                  <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-white">
+                    {currentPlanet} settlement intelligence
+                  </h1>
+                  <p className="mt-2 max-w-2xl text-sm text-slate-400">
+                    Explore candidate nodes, compare Earth proving grounds, and test whether a
+                    crewed outpost plan can survive the environment.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
+                  <span className="rounded border border-space-700 bg-space-900/80 px-2 py-1">UTC 10:42:18</span>
+                  <span className="rounded border border-emerald-800/60 bg-emerald-950/30 px-2 py-1 text-emerald-300">SYSTEM NOMINAL</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                <div className="xl:col-span-9">
                 <PlanetaryGlobe
                   planet={currentPlanet}
                   sites={candidates}
                   selectedSiteId={selectedSite?.id || null}
                   onSelectSite={(s) => setSelectedSite(s)}
                 />
-              </div>
+                </div>
 
-              {/* Selected Site Telemetry & Radar Spider Chart (5 cols) */}
-              <div className="lg:col-span-5 p-6 rounded-2xl cyber-card border border-space-700/80 flex flex-col justify-between">
+                {/* Selected Site Telemetry & Radar Spider Chart */}
+                <div className="xl:col-span-3 p-5 rounded-2xl cyber-card border border-space-700/80 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between border-b border-space-700 pb-3 mb-4">
+                  <div className="border-b border-space-700 pb-3 mb-4">
                     <div>
-                      <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
-                        Active Telemetry & Multi-Criteria Radar
+                      <div className="flex items-center gap-1.5 text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
+                        <Activity className="w-3.5 h-3.5" />
+                        Target telemetry
                       </div>
                       <h3 className="text-lg font-bold text-white">
                         {selectedSite?.name || "Select a Landing Node"}
                       </h3>
                     </div>
-
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-space-900 text-slate-300 border border-space-700">
-                      {selectedSite?.region}
-                    </span>
+                    <div className="mt-2 flex items-center gap-2 text-[10px] font-mono text-slate-400">
+                      <MapPin className="w-3 h-3 text-cyan-400" />
+                      {selectedSite?.region || "Awaiting node selection"}
+                    </div>
                   </div>
 
                   {selectedSite && (
                     <>
+                      <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div className="rounded-lg border border-space-800 bg-black/30 p-2">
+                          <div className="text-[9px] uppercase text-slate-500">Illumination</div>
+                          <div className="mt-1 text-sm font-mono font-bold text-amber-300">{selectedSite.solar_illumination_pct}%</div>
+                        </div>
+                        <div className="rounded-lg border border-space-800 bg-black/30 p-2">
+                          <div className="text-[9px] uppercase text-slate-500">Water ice</div>
+                          <div className="mt-1 text-sm font-mono font-bold text-cyan-300">{selectedSite.water_ice_probability_pct}%</div>
+                        </div>
+                        <div className="rounded-lg border border-space-800 bg-black/30 p-2">
+                          <div className="text-[9px] uppercase text-slate-500">Earth link</div>
+                          <div className="mt-1 flex items-center gap-1 text-sm font-mono font-bold text-blue-300">
+                            <Radio className="w-3 h-3" />{selectedSite.earth_visibility_pct}%
+                          </div>
+                        </div>
+                        <div className="rounded-lg border border-space-800 bg-black/30 p-2">
+                          <div className="text-[9px] uppercase text-slate-500">Slope</div>
+                          <div className="mt-1 text-sm font-mono font-bold text-emerald-300">{selectedSite.slope_degrees}°</div>
+                        </div>
+                      </div>
                       {/* Radar Spider Chart */}
                       <RadarComparison site={selectedSite} />
 
@@ -177,30 +221,40 @@ export default function HomePage() {
                 </div>
 
                 {selectedSite && (
-                  <div className="pt-4 mt-4 border-t border-space-800 flex items-center gap-2">
+                  <div>
+                    <div className="pt-4 mt-4 border-t border-space-800 flex items-center gap-2">
+                      <button
+                        onClick={() => handleOpenAnalogs(selectedSite.id)}
+                        className="flex-1 py-2 px-3 rounded-xl text-xs font-mono bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 flex items-center justify-center gap-1.5 transition-all"
+                      >
+                        <Layers className="w-3.5 h-3.5" />
+                        Analogs
+                      </button>
+                      <button
+                        onClick={() => handleOpenSimulator(selectedSite.id)}
+                        className="flex-1 py-2 px-3 rounded-xl text-xs font-mono bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-700 flex items-center justify-center gap-1.5 transition-all"
+                      >
+                        <Cpu className="w-3.5 h-3.5" />
+                        Simulate
+                      </button>
+                      <button
+                        onClick={() => handleOpenAIExplain(selectedSite.id)}
+                        className="py-2 px-3 rounded-xl text-xs font-mono bg-space-800 hover:bg-space-700 text-slate-200 border border-space-600 flex items-center justify-center gap-1.5 transition-all"
+                        aria-label="Open evidence briefing"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                      </button>
+                    </div>
                     <button
-                      onClick={() => handleOpenAnalogs(selectedSite.id)}
-                      className="flex-1 py-2 px-3 rounded-xl text-xs font-mono bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 flex items-center justify-center gap-1.5 transition-all"
+                      onClick={() => setActiveTab("benchmarks")}
+                      className="mt-2 w-full py-2 rounded-xl text-[10px] font-mono text-slate-400 hover:text-white border border-space-800 hover:border-cyan-700 transition-all flex items-center justify-center gap-1"
                     >
-                      <Layers className="w-3.5 h-3.5" />
-                      Find Earth Analogs
-                    </button>
-                    <button
-                      onClick={() => handleOpenSimulator(selectedSite.id)}
-                      className="flex-1 py-2 px-3 rounded-xl text-xs font-mono bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-700 flex items-center justify-center gap-1.5 transition-all"
-                    >
-                      <Cpu className="w-3.5 h-3.5" />
-                      Simulate Mission
-                    </button>
-                    <button
-                      onClick={() => handleOpenAIExplain(selectedSite.id)}
-                      className="py-2 px-3 rounded-xl text-xs font-mono bg-space-800 hover:bg-space-700 text-slate-200 border border-space-600 flex items-center justify-center gap-1.5 transition-all"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                      Open comparison console <ArrowUpRight className="w-3 h-3" />
                     </button>
                   </div>
                 )}
               </div>
+            </div>
             </div>
 
             {/* Candidate Sites Roster Grid */}
