@@ -45,7 +45,14 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
   const run = (inputs: SimulationParameters) => {
     const id = ++sequence.current;
     setRunning(true); setError(""); setSummary(null);
-    runMissionSimulation(inputs).then(res => { if (id === sequence.current) setSummary(res); })
+    runMissionSimulation(inputs).then(res => {
+      if (id !== sequence.current) return;
+      if (!res.parameters || !Array.isArray(res.daily_telemetry)) {
+        setError("The simulator returned an outdated response. Restart the backend and retry.");
+        return;
+      }
+      setSummary(res);
+    })
       .catch(err => { if (id === sequence.current) setError(err.message); })
       .finally(() => { if (id === sequence.current) setRunning(false); });
   };

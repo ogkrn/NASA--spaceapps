@@ -1,4 +1,13 @@
 export interface Evidence { title: string; url: string; claim: string; }
+export interface ResourceRecord {
+  id: string;
+  name: string;
+  organization: string;
+  url: string;
+  role: string;
+  use_in_app: string;
+  status: string;
+}
 export interface ISRUPotential {
   water_extraction_rate_kg_per_ton: number;
   oxygen_extraction_ilmenite_pct: number;

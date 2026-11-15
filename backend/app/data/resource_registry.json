@@ -9,6 +9,87 @@
     "status": "reference-only"
   },
   {
+    "id": "csa-radarsat",
+    "name": "CSA RADARSAT Constellation Mission",
+    "organization": "CSA",
+    "url": "https://donnees-data.asc-csa.gc.ca/",
+    "role": "Radar imagery, ice monitoring, and surface change observations",
+    "use_in_app": "Linked from the Earth proving-ground comparison for polar and permafrost analog review; no radar product is downloaded by the prototype.",
+    "status": "reference-only"
+  },
+  {
+    "id": "csa-radarsat-1",
+    "name": "CSA RADARSAT-1",
+    "organization": "CSA",
+    "url": "https://www.asc-csa.gc.ca/eng/satellites/radarsat/",
+    "role": "Historical radar observations",
+    "use_in_app": "Partner-agency resource link for historical Earth surface comparison; no measurements are extracted.",
+    "status": "reference-only"
+  },
+  {
+    "id": "csa-sar-python",
+    "name": "SAR Python tutorial repository",
+    "organization": "CSA / community resource",
+    "url": "https://github.com/",
+    "role": "Python and GIS patterns for processing radar imagery",
+    "use_in_app": "Implementation starting point for a future radar-processing pipeline.",
+    "status": "reference-only"
+  },
+  {
+    "id": "esa-copernicus-data-space",
+    "name": "Copernicus Data Space",
+    "organization": "ESA",
+    "url": "https://dataspace.copernicus.eu/",
+    "role": "Sentinel satellite imagery and environmental observations",
+    "use_in_app": "Linked from Earth analogs for future Sentinel/HLS verification; no product is downloaded by the prototype.",
+    "status": "reference-only"
+  },
+  {
+    "id": "esa-open-science-catalog",
+    "name": "ESA Open Science Catalog",
+    "organization": "ESA",
+    "url": "https://opensciencedata.esa.int/",
+    "role": "Geological datasets and scientific products",
+    "use_in_app": "Partner-agency discovery link for analog geology and field-site products.",
+    "status": "reference-only"
+  },
+  {
+    "id": "jaxa-g-portal",
+    "name": "JAXA G-Portal",
+    "organization": "JAXA",
+    "url": "https://gportal.jaxa.jp/",
+    "role": "Earth observation, snow, precipitation, and vegetation",
+    "use_in_app": "Linked from polar and environmental analog review; no product is downloaded by the prototype.",
+    "status": "reference-only"
+  },
+  {
+    "id": "nasa-emit-l2bmin",
+    "name": "EMIT L2B Surface Mineral Identification",
+    "organization": "NASA",
+    "url": "https://lpdaac.usgs.gov/products/emitl2bminv001/",
+    "role": "Surface mineral composition in Earth's arid regions",
+    "use_in_app": "Recommended product for comparing Earth mineral signatures with Mars CRISM context; not ingested yet.",
+    "status": "reference-only"
+  },
+  {
+    "id": "nasa-srtmgl1",
+    "name": "NASA SRTM Global 1 arc second",
+    "organization": "NASA",
+    "url": "https://lpdaac.usgs.gov/products/srtmgl1v003/",
+    "role": "Global elevation, slope, and terrain roughness",
+    "use_in_app": "Recommended product for Earth terrain screening; not ingested yet and does not cover Antarctica.",
+    "status": "reference-only"
+  },
+  {
+    "id": "nasa-hlsl30",
+    "name": "Harmonized Landsat Sentinel-2",
+    "organization": "NASA / ESA",
+    "url": "https://hls.gsfc.nasa.gov/",
+    "role": "30-metre land-cover, reflectance, and surface observations",
+    "use_in_app": "Recommended product for Earth land-surface comparison; not ingested yet.",
+    "status": "reference-only"
+  },
+  {
     "id": "nasa-pds",
     "name": "NASA Planetary Data System",
     "organization": "NASA",

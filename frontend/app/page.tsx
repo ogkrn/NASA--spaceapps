@@ -15,6 +15,8 @@ import { MCDARankingView } from "@/components/dashboard/MCDARankingView";
 import { EducationalModeView } from "@/components/educational/EducationalModeView";
 import { AIExplanationModal } from "@/components/explanation/AIExplanationModal";
 import { DataProvenance } from "@/components/data/DataProvenance";
+import { CompareView } from "@/components/compare/CompareView";
+import { ReferencesView } from "@/components/data/ReferencesView";
 import { 
   Sparkles, 
   Orbit, 
@@ -33,7 +35,7 @@ import {
 export default function HomePage() {
   const [currentPlanet, setCurrentPlanet] = useState<"Moon" | "Mars">("Moon");
   const [mode, setMode] = useState<"scientific" | "educational">("scientific");
-  const [activeTab, setActiveTab] = useState<"explorer" | "analogs" | "simulator" | "benchmarks">("explorer");
+  const [activeTab, setActiveTab] = useState<"explorer" | "analogs" | "simulator" | "benchmarks" | "compare" | "references">("explorer");
 
   const [candidates, setCandidates] = useState<CandidateSite[]>([]);
   const [selectedSite, setSelectedSite] = useState<CandidateSite | null>(null);
@@ -128,6 +130,8 @@ export default function HomePage() {
         ) : activeTab === "simulator" && selectedSite ? (
           /* Mission Planning Simulator View */
           <MissionSimulatorView site={selectedSite} />
+        ) : activeTab === "compare" ? (
+          <CompareView initialBody={currentPlanet} initialSites={candidates} />
         ) : activeTab === "benchmarks" ? (
           /* MCDA Benchmarks View */
           <MCDARankingView
@@ -140,6 +144,8 @@ export default function HomePage() {
               }
             }}
           />
+        ) : activeTab === "references" ? (
+          <ReferencesView />
         ) : (
           /* 3D Explorer & Candidate Roster View */
           <div className="space-y-8">

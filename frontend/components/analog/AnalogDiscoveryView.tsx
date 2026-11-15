@@ -190,7 +190,7 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
                 <p className="text-slate-300">{activeAnalog.data_status}</p>
                 <p>Comparison status: {activeAnalog.comparison_status} · {activeAnalog.confidence}</p>
                 <ul>{activeAnalog.limitations.map(item => <li key={item}>• {item}</li>)}</ul>
-                {activeAnalog.evidence.map((source) => <div key={source.url}>
+                {(activeAnalog.evidence || []).map((source) => <div key={source.url}>
                   <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">{source.title} ↗</a>
                   <p className="text-slate-300 mt-1">{source.claim}</p>
                 </div>)}
@@ -201,7 +201,7 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
                   Sourced activity context
                 </h4>
                 <div className="space-y-2">
-                  {activeAnalog.key_analog_activities.map((act, i) => (
+                  {(activeAnalog.key_analog_activities || []).map((act, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{act}</span>

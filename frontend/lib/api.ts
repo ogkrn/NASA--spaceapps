@@ -1,4 +1,4 @@
-import { CandidateSite, EarthAnalog, AnalogMatchResult, MCDAWeights, MCDARankResult, SimulationParameters, SimulationSummary, AIExplanationResponse } from "./types";
+import { CandidateSite, EarthAnalog, AnalogMatchResult, MCDAWeights, MCDARankResult, SimulationParameters, SimulationSummary, AIExplanationResponse, ResourceRecord } from "./types";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api/backend";
 export let lastApiError = "";
 function announce(message: string) {
@@ -32,3 +32,4 @@ export const matchAnalogsForSite = (id: string) => request<AnalogMatchResult[]>(
 export const runMCDA = (weights: MCDAWeights, body?: "Moon" | "Mars") => request<MCDARankResult[]>(`/analysis/mcda${body ? `?body=${body}` : ""}`, weights);
 export const runMissionSimulation = (params: SimulationParameters) => request<SimulationSummary>("/simulator/run", params);
 export const fetchAIExplanation = (id: string, audience_mode: "scientific" | "educational" | "executive" = "scientific") => request<AIExplanationResponse>("/explain", { site_id: id, audience_mode });
+export const fetchResources = () => request<ResourceRecord[]>("/resources");

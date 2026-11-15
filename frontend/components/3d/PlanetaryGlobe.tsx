@@ -9,6 +9,7 @@ interface PlanetaryGlobeProps {
   sites: CandidateSite[];
   selectedSiteId: string | null;
   onSelectSite: (site: CandidateSite) => void;
+  compact?: boolean;
 }
 
 export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
@@ -16,6 +17,7 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
   sites,
   selectedSiteId,
   onSelectSite,
+  compact = false,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const isMoon = planet === "Moon";
@@ -369,7 +371,7 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
   }, [planet, sites, isMoon]);
 
   return (
-    <div className="relative w-full h-[600px] rounded-2xl overflow-hidden cyber-card border border-space-700/60 bg-gradient-to-b from-black via-space-950 to-space-950 flex flex-col">
+    <div className={`relative w-full ${compact ? "h-[420px]" : "h-[600px]"} rounded-2xl overflow-hidden cyber-card border border-space-700/60 bg-gradient-to-b from-black via-space-950 to-space-950 flex flex-col`}>
       {/* 3D Header Overlay */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-space-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-space-700 text-xs font-mono text-slate-300">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />

@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { Compass, Cpu, Orbit, Sparkles, BookOpen, Layers } from "lucide-react";
+import { Compass, Cpu, Orbit, Sparkles, BookOpen, Layers, GitCompare, BookOpenCheck } from "lucide-react";
 
 interface NavbarProps {
   currentPlanet: "Moon" | "Mars";
   onSelectPlanet: (planet: "Moon" | "Mars") => void;
   mode: "scientific" | "educational";
   onToggleMode: (mode: "scientific" | "educational") => void;
-  activeTab: "explorer" | "analogs" | "simulator" | "benchmarks";
-  onSelectTab: (tab: "explorer" | "analogs" | "simulator" | "benchmarks") => void;
+  activeTab: "explorer" | "analogs" | "simulator" | "benchmarks" | "compare" | "references";
+  onSelectTab: (tab: "explorer" | "analogs" | "simulator" | "benchmarks" | "compare" | "references") => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -90,6 +90,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           <button
+            onClick={() => onSelectTab("compare")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+              activeTab === "compare"
+                ? isMoon
+                  ? "bg-cyan-600/30 text-cyan-300 border border-cyan-500/50"
+                  : "bg-mars-rust/30 text-orange-300 border border-orange-500/50"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <GitCompare className="w-3.5 h-3.5" />
+            Compare Earth
+          </button>
+
+          <button
             onClick={() => onSelectTab("benchmarks")}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
               activeTab === "benchmarks"
@@ -101,6 +115,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Sparkles className="w-3.5 h-3.5" />
             MCDA Ranking
+          </button>
+
+          <button
+            onClick={() => onSelectTab("references")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+              activeTab === "references"
+                ? isMoon
+                  ? "bg-cyan-600/30 text-cyan-300 border border-cyan-500/50"
+                  : "bg-mars-rust/30 text-orange-300 border border-orange-500/50"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <BookOpenCheck className="w-3.5 h-3.5" />
+            References & Data
           </button>
         </nav>
 

@@ -9,6 +9,7 @@ Explore nine Moon/Mars scenarios and six established Earth analog locations. Com
 - Select five lunar and four Martian scenarios using cards or the procedural 3D globe. Cards remain usable without WebGL.
 - Rank scenarios with six adjustable priorities using TOPSIS, a relative decision-ranking method.
 - Compare Earth analog profiles and follow the evidence for relevant field activities.
+- Inspect an exact-coordinate OpenStreetMap view for each Earth analog instead of an unrelated stock photograph, then open partner-agency and NASA product portals for mineral, elevation, radar, and land-surface verification.
 - Run a daily water, oxygen and electrical-energy budget with three power strategies.
 - Inspect full telemetry, assumptions, unmet demand and the settings used for each completed run.
 - Read audience-specific, deterministic site briefings and use the educational lessons/quiz.
@@ -56,6 +57,8 @@ npm run typecheck
 ```
 
 The catalog script validates local records; its legacy filename does not imply data ingestion. Unit tests verify software behaviour and budgets, not physical accuracy. See [methodology](docs/SCIENTIFIC_METHODOLOGY.md), [user guide](docs/USER_GUIDE.md), [architecture](docs/ARCHITECTURE.md), and [repair report](docs/PACKAGE_A_CHANGES.md).
+
+The comparison console links CSA RADARSAT, the SAR Python/GIS starting point, ESA Copernicus Data Space, the ESA Open Science Catalog, JAXA G-Portal, NASA EMIT L2B minerals, NASA SRTM elevation, and NASA/ESA HLS. These are source portals for the next ingestion stage; the prototype labels them as reference-only until product IDs, acquisition dates, processing level, and extracted measurements are recorded.
 
 ## Extension path
 
