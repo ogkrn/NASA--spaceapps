@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ARES-LUNA | Planetary Analog Intelligence & Mission Simulator",
-  description: "Advanced Automated Planetary Analog Discovery, Lunar/Mars Settlement Site Selection & Mission Life-Support Simulation for NASA Space Apps Challenge",
+  description: "Source-linked Earth analog descriptions, illustrative Moon/Mars priority rankings and resource-budget scenarios for NASA Space Apps Challenge",
 };
 
 export default function RootLayout({

@@ -14,19 +14,27 @@
     "thermal_min_k": 180,
     "thermal_max_k": 285,
     "natural_radiation_shielding_pct": 24.0,
-    "geological_context": "Ancient paleolake basin featuring an exceptionally preserved river delta deposit rich in smectite clays, carbonates, and silica. In-situ verified by Perseverance rover.",
+    "geological_context": "Perseverance observations show an ancient delta at Jezero, supporting investigation of a past river-lake environment. Ancient water evidence is not proof of accessible present-day ice.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 38.0,
       "oxygen_extraction_ilmenite_pct": 12.0,
       "solar_flux_w_m2": 590
     },
     "hazards": [
-      "Seasonal global dust storms reducing solar output by up to 95%",
-      "Atmospheric pressure (~610 Pa) requiring pressurized EVA suits and habitation",
-      "Perchlorate salts in regolith requiring chemical scrubbing"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Highest priority astrobiology site; direct biosignature search opportunity and extensive rover ground truth calibration.",
-    "recommended_analog_type": "paleolake_delta"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "paleolake_delta",
+    "evidence": [
+      {
+        "title": "NASA: Perseverance view of Jezero delta",
+        "url": "https://science.nasa.gov/resource/perseverance-view-of-the-delta-in-jezero-crater/",
+        "claim": "The delta is interpreted as the meeting of an ancient river and lake."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "mars-arcadia-planitia",
@@ -43,19 +51,27 @@
     "thermal_min_k": 165,
     "thermal_max_k": 260,
     "natural_radiation_shielding_pct": 28.0,
-    "geological_context": "Vast, ultra-flat lowlands harboring massive sheets of pure subsurface water ice detected by SHARAD radar, situated only 1 to 2.5 meters beneath the surface dust layer.",
+    "geological_context": "NASA orbital analyses identify Arcadia Planitia as a region of interest for buried ice. Regional evidence does not provide a 98% extraction probability at this catalog point.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 185.0,
       "oxygen_extraction_ilmenite_pct": 6.5,
       "solar_flux_w_m2": 480
     },
     "hazards": [
-      "Lower mid-latitude solar insolation compared to equatorial landing sites",
-      "Cryo-karst surface sublimation pits (brain terrain) complicating rover transit",
-      "Cold winter condensation of atmospheric CO2 frosts"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "The gold-standard ISRU water hub for permanent human colonization and return propellant manufacture (CH4/LOX Sabatier reactor).",
-    "recommended_analog_type": "permafrost_tundra"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "permafrost_tundra",
+    "evidence": [
+      {
+        "title": "NASA: mapping buried ice on Mars",
+        "url": "https://www.nasa.gov/solar-system/nasas-treasure-map-for-water-ice-on-mars/",
+        "claim": "Maps regional shallow-ice potential, including Arcadia; no app-specific extraction yield is established."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "mars-noctis-labyrinthus",
@@ -72,23 +88,31 @@
     "thermal_min_k": 195,
     "thermal_max_k": 290,
     "natural_radiation_shielding_pct": 52.0,
-    "geological_context": "Intricate labyrinth of steep-walled grabens, rift valleys, and tectonic collapse chasms. Canyon walls offer deep shadowing, hydrated sulfate beds, and relic glacial features.",
+    "geological_context": "ESA Mars Express images show a fractured system of valleys and graben at Noctis Labyrinthus associated with the Tharsis region. Field access and resource availability remain open questions.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 64.0,
       "oxygen_extraction_ilmenite_pct": 10.4,
       "solar_flux_w_m2": 590
     },
     "hazards": [
-      "Complex canyon morphology causing terrain obscuration of radio communications",
-      "Cliffside rockfall and slope debris flow risks during seismic events",
-      "Restricted landing ellipses requiring Pinpoint Landing (PPL) guidance"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Natural wind break and canyon topographic radiation shielding; reveals stratigraphy spanning millions of martian years.",
-    "recommended_analog_type": "hyper_arid_canyon"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "hyper_arid_canyon",
+    "evidence": [
+      {
+        "title": "ESA: Noctis Labyrinthus",
+        "url": "https://www.esa.int/Science_Exploration/Space_Science/Mars_Express/Noctis_Labyrinthus_labyrinth_of_the_night",
+        "claim": "HRSC imagery documents fractured terrain near 6.5 S, 260 E; not a cave safety assessment."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "mars-olympus-mons-cave",
-    "name": "Olympus Mons Flank (Volcanic Lava Cave)",
+    "name": "Olympus Mons (hypothetical cave scenario)",
     "body": "Mars",
     "region": "Tharsis Montes",
     "latitude": 18.6,
@@ -101,19 +125,31 @@
     "thermal_min_k": 240,
     "thermal_max_k": 248,
     "natural_radiation_shielding_pct": 98.7,
-    "geological_context": "Gigantic subterranean volcanic lava tube formed by ancient Tharsis shield volcanism. Over 80 meters tall with thick basalt roof providing immense structural integrity.",
+    "geological_context": "Hypothetical volcanic-cave scenario near Olympus Mons. USGS places the volcano near the catalog coordinates; these coordinates do not identify a verified cave. NASA describes possible lava-tube continuity elsewhere near its base.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 15.0,
       "oxygen_extraction_ilmenite_pct": 16.2,
       "solar_flux_w_m2": 590
     },
     "hazards": [
-      "High elevation reduces atmospheric density for aerodynamic aerobraking during landing",
-      "Requires robotic spelunking and advanced vertical mobility tether systems",
-      "Limited direct line of sight to solar arrays installed on exterior plateau"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Maximum protection against Galactic Cosmic Rays (GCR) and Solar Particle Events (SPE). Pristine preservation of un-irradiated organic compounds.",
-    "recommended_analog_type": "lava_tube"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "lava_tube",
+    "evidence": [
+      {
+        "title": "USGS: Olympus Mons caldera map",
+        "url": "https://pubs.usgs.gov/sim/3470/sim3470_pamphlet.pdf",
+        "claim": "Places Olympus Mons at about 18.65 N, 226.20 E; this is volcano context, not evidence for an 80 m cave."
+      },
+      {
+        "title": "NASA: lava channel near Olympus Mons",
+        "url": "https://science.nasa.gov/resource/lava-flow-near-the-base-of-olympus-mons/",
+        "claim": "A channel may continue underground; its cave entrance is not visible at that image location."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   }
 ]
-

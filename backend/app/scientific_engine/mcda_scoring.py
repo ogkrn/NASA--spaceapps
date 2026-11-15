@@ -87,10 +87,10 @@ class MCDAScoringEngine:
         # Step 5: Calculate Relative Closeness to Ideal Solution C_i = S- / (S+ + S-)
         denominator = S_plus + S_minus
         denominator[denominator == 0] = 1e-9
-        C = S_minus / denominator
+        C = np.where((S_plus + S_minus) < 1e-12, 0.5, S_minus / denominator)
 
         # Rank candidates
-        sorted_indices = np.argsort(-C)
+        sorted_indices = np.argsort(-C, kind="stable")
 
         results = []
         for rank_pos, idx in enumerate(sorted_indices, start=1):
@@ -111,21 +111,21 @@ class MCDAScoringEngine:
             worst_dim = min(dim_scores.items(), key=lambda item: item[1])
 
             strength_map = {
-                "illumination": "High Continuous Solar Power Availability",
-                "water_ice": "Exceptional Volatile / Water Ice Access",
-                "trafficability": "Flat Smooth Terrain for Landing & Surface Traverse",
-                "communication": "Persistent Direct-to-Earth Line of Sight",
-                "radiation_shielding": "Superior Natural Radiation Shielding",
-                "thermal_stability": "Benign / Constant Subsurface Thermal Environment"
+                "illumination": "Higher illumination input in this scenario",
+                "water_ice": "Higher ice input in this scenario",
+                "trafficability": "Lower slope input in this scenario",
+                "communication": "Higher Earth visibility input in this scenario",
+                "radiation_shielding": "Higher shielding input in this scenario",
+                "thermal_stability": "Smaller temperature range in the scenario"
             }
 
             vuln_map = {
-                "illumination": "Extended Darkness Requiring Energy Reserves",
-                "water_ice": "Scarcity of Local In-Situ Water Ice",
-                "trafficability": "Rough or Steep Gradients Impeding Rover Mobility",
-                "communication": "Intermittent or Blocked Earth Line of Sight",
-                "radiation_shielding": "High Surface Cosmic Ray / SPE Exposure",
-                "thermal_stability": "Violent Diurnal Thermal Cycling (-200°C to +100°C)"
+                "illumination": "Lower illumination input in this scenario",
+                "water_ice": "Lower ice input in this scenario",
+                "trafficability": "Higher slope input in this scenario",
+                "communication": "Lower Earth visibility input in this scenario",
+                "radiation_shielding": "Lower shielding input in this scenario",
+                "thermal_stability": "Larger temperature range in the scenario"
             }
 
             results.append(

@@ -13,14 +13,14 @@ export const RadarComparison: React.FC<RadarComparisonProps> = ({ site }) => {
   // Derive normalized scores (0 to 100)
   const thermalDelta = Math.abs(site.thermal_max_k - site.thermal_min_k);
   const thermalStability = Math.round(Math.max(5, 100 - thermalDelta / 2.5));
-  const trafficability = Math.round(Math.max(5, 100 - site.slope_degrees * 4.5));
+  const trafficability = Math.round(Math.max(5, 100 - site.slope_degrees * 5.0));
 
   const criteria = [
     { label: "Solar Power", value: site.solar_illumination_pct },
-    { label: "Water Ice", value: site.water_ice_probability_pct },
+    { label: "Ice assumption", value: site.water_ice_probability_pct },
     { label: "Trafficability", value: trafficability },
     { label: "Earth Comm", value: site.earth_visibility_pct },
-    { label: "Rad Shield", value: site.natural_radiation_shielding_pct },
+    { label: "Shield assumption", value: site.natural_radiation_shielding_pct },
     { label: "Thermal Stability", value: thermalStability },
   ];
 

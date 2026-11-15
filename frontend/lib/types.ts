@@ -1,3 +1,4 @@
+export interface Evidence { title: string; url: string; claim: string; }
 export interface ISRUPotential {
   water_extraction_rate_kg_per_ton: number;
   oxygen_extraction_ilmenite_pct: number;
@@ -5,6 +6,10 @@ export interface ISRUPotential {
 }
 
 export interface CandidateSite {
+  data_provenance?: { status: string; confidence: string; note: string; sources: {id: string; fields: string[]}[] } | null;
+  evidence: Evidence[];
+  data_status: string;
+  measurement_notes: string;
   id: string;
   name: string;
   body: "Moon" | "Mars";
@@ -24,15 +29,11 @@ export interface CandidateSite {
   hazards: string[];
   scientific_significance: string;
   recommended_analog_type: string;
-  data_provenance?: {
-    status: string;
-    confidence: string;
-    note: string;
-    sources: { id: string; fields: string[] }[];
-  };
 }
 
 export interface EarthAnalog {
+  evidence: Evidence[];
+  data_status: string;
   id: string;
   name: string;
   location: string;
@@ -58,6 +59,11 @@ export interface EarthAnalog {
 }
 
 export interface AnalogMatchResult {
+  comparison_status: string;
+  confidence: string;
+  limitations: string[];
+  evidence: Evidence[];
+  data_status: string;
   analog_id: string;
   analog_name: string;
   location: string;
@@ -69,9 +75,6 @@ export interface AnalogMatchResult {
   volatiles_score: number;
   scientific_rationale: string;
   key_analog_activities: string[];
-  comparison_status?: string;
-  confidence?: string;
-  limitations?: string[];
 }
 
 export interface MCDAWeights {
@@ -115,6 +118,12 @@ export interface SimulationParameters {
 }
 
 export interface SimulationDayTelemetry {
+  water_deficit_liters: number;
+  oxygen_deficit_kg: number;
+  power_deficit_kwh: number;
+  electrolysis_feedwater_liters: number;
+  water_consumed_net_liters: number;
+  oxygen_produced_kg: number;
   day: number;
   power_generated_kwh: number;
   power_consumed_kwh: number;
@@ -127,6 +136,12 @@ export interface SimulationDayTelemetry {
 }
 
 export interface SimulationSummary {
+  execution_mode: "server" | "offline_demo";
+  warnings: string[];
+  parameters: SimulationParameters;
+  assumptions: string[];
+  first_failure_day: number | null;
+  model_version: string;
   mission_viability_score: number;
   status: "NOMINAL" | "MARGINAL" | "CRITICAL";
   total_power_generated_mwh: number;
@@ -135,11 +150,10 @@ export interface SimulationSummary {
   bottlenecks: string[];
   recommendations: string[];
   daily_telemetry: SimulationDayTelemetry[];
-  execution_mode?: "server" | "offline_demo";
-  warnings?: string[];
 }
 
 export interface AIExplanationResponse {
+  evidence: Evidence[];
   site_id: string;
   site_name: string;
   body: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CandidateSite, SimulationParameters, SimulationSummary } from "@/lib/types";
 import { runMissionSimulation } from "@/lib/api";
 import { 
@@ -40,28 +40,24 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
   const [summary, setSummary] = useState<SimulationSummary | null>(null);
   const [running, setRunning] = useState<boolean>(false);
 
-  // Update site_id if site changes
-  useEffect(() => {
-    setParams((prev) => ({ ...prev, site_id: site.id }));
-  }, [site.id]);
-
-  const handleRunSimulation = () => {
-    setRunning(true);
-    runMissionSimulation(params)
-      .then((res) => {
-        setSummary(res);
-        setRunning(false);
-      })
-      .catch((err) => {
-        console.error("Simulation run error", err);
-        setRunning(false);
-      });
+  const sequence = useRef(0);
+  const [error, setError] = useState("");
+  const run = (inputs: SimulationParameters) => {
+    const id = ++sequence.current;
+    setRunning(true); setError(""); setSummary(null);
+    runMissionSimulation(inputs).then(res => { if (id === sequence.current) setSummary(res); })
+      .catch(err => { if (id === sequence.current) setError(err.message); })
+      .finally(() => { if (id === sequence.current) setRunning(false); });
   };
-
-  // Run automatically on first mount
+  const handleRunSimulation = () => run({ ...params, site_id: site.id });
   useEffect(() => {
-    handleRunSimulation();
+    const inputs = { ...params, site_id: site.id };
+    setParams(inputs); run(inputs);
+    return () => { sequence.current++; };
+    // Site changes intentionally retain the current user inputs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [site.id]);
+  const dirty = summary && JSON.stringify(summary.parameters) !== JSON.stringify({ ...params, site_id: site.id });
 
   return (
     <div className="w-full space-y-6">
@@ -70,7 +66,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-amber-400 mb-1">
             <Cpu className="w-4 h-4 text-amber-400" />
-            Planetary Outpost Life-Support & Physics Simulator
+            Illustrative Resource-Budget Simulator
           </div>
           <h2 className="text-xl font-bold text-white tracking-tight">
             Mission Planning: {site.name} ({site.body})
@@ -89,7 +85,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
           {running ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Simulating Orbit...
+              Calculating budget...
             </>
           ) : (
             <>
@@ -118,15 +114,15 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
             <div className="flex justify-between text-xs font-mono mb-1.5">
               <span className="text-slate-300 flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-cyan-400" />
-                Duration (Days)
+                Duration (24-hour Earth days)
               </span>
-              <span className="text-amber-300 font-bold">{params.mission_duration_days} sols</span>
+              <span className="text-amber-300 font-bold">{params.mission_duration_days} days</span>
             </div>
-            <input
+            <input aria-label="Duration in Earth days"
               type="range"
               min={14}
               max={180}
-              step={7}
+              step={1}
               value={params.mission_duration_days}
               onChange={(e) => setParams({ ...params, mission_duration_days: Number(e.target.value) })}
               className="w-full accent-amber-400 bg-space-950 h-1.5 rounded-lg appearance-none cursor-pointer"
@@ -138,11 +134,11 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
             <div className="flex justify-between text-xs font-mono mb-1.5">
               <span className="text-slate-300 flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-blue-400" />
-                Crew Compliment
+                Crew Complement
               </span>
               <span className="text-amber-300 font-bold">{params.crew_size} Astronauts</span>
             </div>
-            <input
+            <input aria-label="Crew size"
               type="range"
               min={2}
               max={10}
@@ -188,7 +184,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
               </span>
               <span className="text-amber-300 font-bold">{params.battery_capacity_kwh} kWh</span>
             </div>
-            <input
+            <input aria-label="Battery capacity in kWh"
               type="range"
               min={100}
               max={1000}
@@ -208,7 +204,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
               </span>
               <span className="text-amber-300 font-bold">{params.radiation_habitat_burial_depth_m} meters</span>
             </div>
-            <input
+            <input aria-label="Burial depth in meters"
               type="range"
               min={0.0}
               max={3.5}
@@ -228,7 +224,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
               </span>
               <span className="text-amber-300 font-bold">{Math.round(params.water_recycling_efficiency * 100)}%</span>
             </div>
-            <input
+            <input aria-label="Water recycling efficiency"
               type="range"
               min={0.70}
               max={0.98}
@@ -246,9 +242,9 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                 <Sun className="w-3.5 h-3.5 text-amber-400" />
                 ISRU Regolith Mining Rate
               </span>
-              <span className="text-amber-300 font-bold">{params.isru_excavation_rate_kg_day} kg/sol</span>
+              <span className="text-amber-300 font-bold">{params.isru_excavation_rate_kg_day} kg/day</span>
             </div>
-            <input
+            <input aria-label="Excavation in kg per day"
               type="range"
               min={50}
               max={600}
@@ -262,24 +258,17 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
 
         {/* Results & Telemetry Charts Column (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
+          {error && <p role="alert" className="border border-red-500 rounded p-4">{error} Use Execute Simulation to retry.</p>}
+          {dirty && <p className="text-amber-200">Inputs changed. Results below belong to the last completed run. Execute again to update.</p>}
           {summary ? (
             <>
-              {summary.execution_mode === "offline_demo" && (
-                <div className="rounded-xl border border-amber-700 bg-amber-950/60 p-3 text-xs text-amber-200">
-                  Backend unavailable: showing an offline demo calculation. Start FastAPI for the authoritative result.
-                </div>
-              )}
-              {summary.warnings?.map((warning) => (
-                <div key={warning} className="rounded-xl border border-space-700 bg-space-950/70 p-3 text-xs text-slate-400">
-                  {warning}
-                </div>
-              ))}
+              {summary.warnings.map(warning => <p key={warning} className="text-xs text-amber-200">{warning}</p>)}
               {/* Scorecard Hero */}
               <div className="p-6 rounded-2xl cyber-card border border-space-700/80 bg-space-900/80">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div>
                     <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider">
-                      Mission Viability Assessment
+                      Resource-budget indicator (not survival probability)
                     </div>
                     <div className="flex items-center gap-3 mt-1">
                       <span className="text-3xl font-extrabold font-mono text-white">
@@ -303,15 +292,15 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                   <div className="grid grid-cols-3 gap-3 font-mono text-xs">
                     <div className="p-2.5 rounded-xl bg-space-950 border border-space-800">
                       <div className="text-[10px] text-slate-400">Power Generated</div>
-                      <div className="text-white font-bold">{summary.total_power_generated_mwh} MWh</div>
+                      <div className="text-white font-bold">{summary.total_power_generated_mwh.toFixed(2)} MWh</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-space-950 border border-space-800">
                       <div className="text-[10px] text-slate-400">ISRU Water Yield</div>
-                      <div className="text-cyan-300 font-bold">{summary.total_water_extracted_isru_liters} L</div>
+                      <div className="text-cyan-300 font-bold">{summary.total_water_extracted_isru_liters.toFixed(1)} L</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-space-950 border border-space-800">
                       <div className="text-[10px] text-slate-400">Radiation Dose</div>
-                      <div className="text-purple-300 font-bold">{summary.final_cumulative_radiation_msv} mSv</div>
+                      <div className="text-purple-300 font-bold">{summary.final_cumulative_radiation_msv.toFixed(2)} mSv</div>
                     </div>
                   </div>
                 </div>
@@ -325,7 +314,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                     </span>
                     <span className="flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block" />
-                      Cumulative Radiation (mSv)
+                      Radiation trend (separate scale; total shown above)
                     </span>
                   </div>
 
@@ -341,7 +330,7 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                       <path
                         d={summary.daily_telemetry
                           .map((d, i) => {
-                            const x = (i / (summary.daily_telemetry.length - 1)) * 500;
+                            const x = (i / Math.max(1, summary.daily_telemetry.length - 1)) * 500;
                             const y = 100 - d.battery_charge_pct;
                             return `${i === 0 ? "M" : "L"} ${x} ${y}`;
                           })
@@ -355,8 +344,8 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                       <path
                         d={summary.daily_telemetry
                           .map((d, i) => {
-                            const x = (i / (summary.daily_telemetry.length - 1)) * 500;
-                            const y = Math.max(10, 100 - (d.cumulative_radiation_msv / 80) * 100);
+                            const x = (i / Math.max(1, summary.daily_telemetry.length - 1)) * 500;
+                            const y = 100 - (d.cumulative_radiation_msv / Math.max(1, summary.final_cumulative_radiation_msv)) * 100;
                             return `${i === 0 ? "M" : "L"} ${x} ${y}`;
                           })
                           .join(" ")}
@@ -368,12 +357,18 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                     </svg>
 
                     <div className="absolute bottom-1 right-2 text-[10px] font-mono text-slate-500">
-                      Day 1 → Day {params.mission_duration_days}
+                      Day 1 → Day {summary.parameters.mission_duration_days}
                     </div>
                   </div>
                 </div>
               </div>
 
+              <div className="p-4 border border-space-700 rounded-xl text-sm space-y-2">
+                <p><strong>Final oxygen:</strong> {summary.daily_telemetry.at(-1)?.oxygen_stored_kg.toFixed(2)} kg · <strong>Final water:</strong> {summary.daily_telemetry.at(-1)?.water_stored_liters.toFixed(2)} L</p>
+                <p>First unmet-demand day: {summary.first_failure_day ?? "none within this model"}</p>
+                <details><summary className="cursor-pointer">Model assumptions and full telemetry</summary><ul className="list-disc pl-5">{summary.assumptions.map(x => <li key={x}>{x}</li>)}</ul>
+                <div className="overflow-auto max-h-64 mt-3"><table className="w-full text-xs"><thead><tr><th>Day</th><th>Water L</th><th>Oxygen kg</th><th>Power deficit kWh</th><th>O2 deficit kg</th></tr></thead><tbody>{summary.daily_telemetry.map(d => <tr key={d.day}><td>{d.day}</td><td>{d.water_stored_liters.toFixed(2)}</td><td>{d.oxygen_stored_kg.toFixed(2)}</td><td>{d.power_deficit_kwh.toFixed(2)}</td><td>{d.oxygen_deficit_kg.toFixed(2)}</td></tr>)}</tbody></table></div></details>
+              </div>
               {/* Bottlenecks and Recommendations */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl bg-space-900/70 border border-space-800">
@@ -407,12 +402,12 @@ export const MissionSimulatorView: React.FC<MissionSimulatorViewProps> = ({ site
                 </div>
               </div>
             </>
-          ) : (
+          ) : !error && running ? (
             <div className="flex flex-col items-center justify-center p-16 gap-3 cyber-card rounded-2xl">
               <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
-              <p className="text-sm font-mono text-slate-300">Initializing physics simulation engine...</p>
+              <p className="text-sm font-mono text-slate-300">Calculating scenario budget...</p>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

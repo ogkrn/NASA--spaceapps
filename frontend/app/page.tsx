@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { CandidateSite } from "@/lib/types";
 import { fetchCandidates } from "@/lib/api";
+import { ServiceStatus } from "@/components/ServiceStatus";
+import { EvidencePanel } from "@/components/EvidencePanel";
 import { Navbar } from "@/components/Navbar";
 import { PlanetaryGlobe } from "@/components/3d/PlanetaryGlobe";
 import { RadarComparison } from "@/components/dashboard/RadarComparison";
@@ -45,6 +47,8 @@ export default function HomePage() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    setCandidates([]);
+    setSelectedSite(null);
     fetchCandidates(currentPlanet)
       .then((data) => {
         if (isMounted) {
@@ -90,8 +94,11 @@ export default function HomePage() {
       <Navbar
         currentPlanet={currentPlanet}
         onSelectPlanet={(p) => {
-          setCurrentPlanet(p);
-          setSelectedSite(null);
+          if (p !== currentPlanet) {
+            setCurrentPlanet(p);
+            setSelectedSite(null);
+            setAiModalOpen(false);
+          }
         }}
         mode={mode}
         onToggleMode={setMode}
@@ -99,12 +106,13 @@ export default function HomePage() {
         onSelectTab={setActiveTab}
       />
 
+      <ServiceStatus />
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {loading ? (
           <div className="flex flex-col items-center justify-center p-24 gap-3">
             <Loader2 className="w-10 h-10 text-cyan-400 animate-spin" />
-            <p className="text-sm font-mono text-slate-400">Loading {currentPlanet} scientific coordinates & telemetry...</p>
+            <p className="text-sm font-mono text-slate-400">Loading {currentPlanet} scenarios and evidence...</p>
           </div>
         ) : mode === "educational" && activeTab === "explorer" ? (
           /* Educational Mode View */
@@ -141,19 +149,19 @@ export default function HomePage() {
                 <div>
                   <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-400">
                     <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    Mission control / live planetary view
+                    Exploration dashboard / visual reference
                   </div>
                   <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight text-white">
                     {currentPlanet} settlement intelligence
                   </h1>
                   <p className="mt-2 max-w-2xl text-sm text-slate-400">
                     Explore candidate nodes, compare Earth proving grounds, and test whether a
-                    crewed outpost plan can survive the environment.
+                    resource budget meets its declared scenario assumptions.
                   </p>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                  <span className="rounded border border-space-700 bg-space-900/80 px-2 py-1">UTC 10:42:18</span>
-                  <span className="rounded border border-emerald-800/60 bg-emerald-950/30 px-2 py-1 text-emerald-300">SYSTEM NOMINAL</span>
+                  <span className="rounded border border-space-700 bg-space-900/80 px-2 py-1">LOCAL SCENARIOS</span>
+                  <span className="rounded border border-emerald-800/60 bg-emerald-950/30 px-2 py-1 text-emerald-300">ILLUSTRATIVE INPUTS</span>
                 </div>
               </div>
 
@@ -172,9 +180,8 @@ export default function HomePage() {
                 <div>
                   <div className="border-b border-space-700 pb-3 mb-4">
                     <div>
-                      <div className="flex items-center gap-1.5 text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
-                        <Activity className="w-3.5 h-3.5" />
-                        Target telemetry
+                      <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider">
+                        Illustrative scenario inputs & priority radar
                       </div>
                       <h3 className="text-lg font-bold text-white">
                         {selectedSite?.name || "Select a Landing Node"}
@@ -194,7 +201,7 @@ export default function HomePage() {
                           <div className="mt-1 text-sm font-mono font-bold text-amber-300">{selectedSite.solar_illumination_pct}%</div>
                         </div>
                         <div className="rounded-lg border border-space-800 bg-black/30 p-2">
-                          <div className="text-[9px] uppercase text-slate-500">Water ice</div>
+                          <div className="text-[9px] uppercase text-slate-500">Ice assumption</div>
                           <div className="mt-1 text-sm font-mono font-bold text-cyan-300">{selectedSite.water_ice_probability_pct}%</div>
                         </div>
                         <div className="rounded-lg border border-space-800 bg-black/30 p-2">
@@ -266,7 +273,7 @@ export default function HomePage() {
                     {currentPlanet} Settlement Candidate Roster
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Curated catalogue candidates mapped to NASA LRO / MRO resource families; product-level validation is shown in provenance.
+                    Nine exploration scenarios with linked context. No landing approval or safety rating.
                   </p>
                 </div>
 
@@ -293,6 +300,7 @@ export default function HomePage() {
         )}
       </main>
 
+      {selectedSite && <div className="max-w-7xl w-full mx-auto px-4"><EvidencePanel site={selectedSite} /></div>}
       {/* AI Explanation Modal */}
       {siteForModal && (
         <AIExplanationModal
@@ -312,7 +320,7 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center gap-4 text-slate-400">
-            <span>Data Sources: NASA Earthdata · PDS · LRO Diviner · MRO CRISM · JAXA</span>
+            <span>Context references: NASA · ESA · USGS / Numerical inputs: illustrative</span>
           </div>
         </div>
       </footer>

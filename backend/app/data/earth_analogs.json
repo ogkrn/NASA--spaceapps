@@ -11,16 +11,10 @@
     "mean_temp_c": -17.5,
     "annual_precipitation_mm": 45,
     "geological_features": [
-      "23-km diameter meteorite impact crater in dolomite/limestone bedrock",
-      "Impact-generated hydrothermal deposits and polymict impact breccia",
-      "Periglacial polygon ground and permafrost ground ice",
-      "Relic glacial valleys with active seasonal gullies"
+      "Haughton on Devon Island is used as a planetary mission analog."
     ],
     "nasa_mission_testing": [
-      "NASA Haughton-Mars Project (HMP) active since 1997",
-      "Pressurized rover traverse simulations (K10 / Moon-1 rover trials)",
-      "Astronaut EVA field navigation and scientific sample caching protocols",
-      "Drill tests for subsurface ice core sampling"
+      "Identifies the Haughton Mars Project on Devon Island as a mission analog."
     ],
     "environmental_similarity_profile": {
       "temperature_extreme_score": 0.88,
@@ -30,8 +24,21 @@
       "ice_volatile_relevance_score": 0.91,
       "radiation_exposure_fidelity": 0.35
     },
-    "matched_planetary_targets": ["luna-shackleton-rim", "luna-connecting-ridge", "luna-faustini-rim", "mars-arcadia-planitia"],
-    "summary": "Devon Island is widely regarded as the premier terrestrial analog for lunar polar craters and Martian permafrost terrains due to its barren polar desert setting, impact crater morphology, and total absence of vegetative cover."
+    "matched_planetary_targets": [
+      "luna-shackleton-rim",
+      "luna-connecting-ridge",
+      "luna-faustini-rim",
+      "mars-arcadia-planitia"
+    ],
+    "summary": "Haughton on Devon Island is used as a planetary mission analog.",
+    "evidence": [
+      {
+        "title": "NASA: planetary analogs",
+        "url": "https://science.nasa.gov/solar-system/planetary-analogs/10-things-to-know-about-planetary-analogs/",
+        "claim": "Identifies the Haughton Mars Project on Devon Island as a mission analog."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   },
   {
     "id": "earth-hi-seas-mauna-loa",
@@ -45,27 +52,32 @@
     "mean_temp_c": 11.2,
     "annual_precipitation_mm": 220,
     "geological_features": [
-      "Fresh tholeiitic basaltic 'a'a and pahoehoe lava flows",
-      "Intricate networks of uncollapsed volcanic lava tubes and skylights",
-      "High vesicularity basalt regolith resembling lunar mare basalts",
-      "Zero surface vegetation at 2,500 meters elevation"
+      "HI-SEAS on Mauna Loa has hosted crew-isolation research. This does not establish a cave-fidelity percentage."
     ],
     "nasa_mission_testing": [
-      "NASA-funded HI-SEAS long-duration crew isolation missions (4-12 months)",
-      "Lava tube ingress, 3D LiDAR mapping, and cave habitat deployment testing",
-      "Robotic reconnaissance and drone flight in subterranean voids",
-      "EVA suit mobility testing on abrasive basaltic terrain"
+      "Documents an eight-month HI-SEAS crew-isolation mission in Hawaii."
     ],
     "environmental_similarity_profile": {
       "temperature_extreme_score": 0.45,
       "geological_fidelity_score": 0.96,
       "isolation_and_logistics_score": 0.85,
       "regolith_mechanics_score": 0.92,
-      "ice_volatile_relevance_score": 0.20,
-      "radiation_exposure_fidelity": 0.40
+      "ice_volatile_relevance_score": 0.2,
+      "radiation_exposure_fidelity": 0.4
     },
-    "matched_planetary_targets": ["luna-marius-hills-pit", "mars-olympus-mons-cave"],
-    "summary": "HI-SEAS on Mauna Loa provides an outstanding morphological and mineralogical analog for basaltic lunar lava tubes (Marius Hills) and Martian volcanic structures, making it the primary site for subterranean planetary habitat prototyping."
+    "matched_planetary_targets": [
+      "luna-marius-hills-pit",
+      "mars-olympus-mons-cave"
+    ],
+    "summary": "HI-SEAS on Mauna Loa has hosted crew-isolation research. This does not establish a cave-fidelity percentage.",
+    "evidence": [
+      {
+        "title": "NASA: HI-SEAS isolation mission",
+        "url": "https://www.nasa.gov/centers-and-facilities/kennedy/hi-seas-team-completes-8-month-isolation-mission/",
+        "claim": "Documents an eight-month HI-SEAS crew-isolation mission in Hawaii."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   },
   {
     "id": "earth-atacama-yungay",
@@ -79,27 +91,32 @@
     "mean_temp_c": 16.5,
     "annual_precipitation_mm": 2,
     "geological_features": [
-      "Driest non-polar location on Earth; centuries without recorded rainfall",
-      "High natural concentrations of soil perchlorates and nitrates identical to Martian regolith",
-      "Extreme solar UV irradiance (>1100 W/m² peak daylight)",
-      "Gypsum crusts, halite deposits, and endolithic hypolithic cyanobacteria in salt rocks"
+      "Atacama environments support studies of extreme dryness and tests of life-detection instruments and drilling."
     ],
     "nasa_mission_testing": [
-      "NASA Astrobiology Life in the Atacama (LITA) rover campaigns",
-      "Testing Viking, Curiosity, and Perseverance biosignature detection instruments",
-      "Autonomous sample-drilling rovers (Zoë robot drilling up to 2m depth)",
-      "Dust filtration and photovoltaic dust accumulation degradation testing"
+      "Describes Atacama analog research and instrument/drilling tests; no profile-fidelity percentages."
     ],
     "environmental_similarity_profile": {
       "temperature_extreme_score": 0.65,
       "geological_fidelity_score": 0.92,
-      "isolation_and_logistics_score": 0.80,
+      "isolation_and_logistics_score": 0.8,
       "regolith_mechanics_score": 0.88,
       "ice_volatile_relevance_score": 0.15,
       "radiation_exposure_fidelity": 0.78
     },
-    "matched_planetary_targets": ["mars-jezero-crater", "mars-noctis-labyrinthus"],
-    "summary": "The Atacama Desert is Earth's definitive biological and chemical analog for Martian soil chemistry and hyper-aridity, where NASA and ESA test biosignature detection instrumentation and perchlorate mitigation."
+    "matched_planetary_targets": [
+      "mars-jezero-crater",
+      "mars-noctis-labyrinthus"
+    ],
+    "summary": "Atacama environments support studies of extreme dryness and tests of life-detection instruments and drilling.",
+    "evidence": [
+      {
+        "title": "NASA Astrobiology: field sites",
+        "url": "https://astrobiology.nasa.gov/research-locations/",
+        "claim": "Describes Atacama analog research and instrument/drilling tests; no profile-fidelity percentages."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   },
   {
     "id": "earth-svalbard-amase",
@@ -113,27 +130,33 @@
     "mean_temp_c": -5.5,
     "annual_precipitation_mm": 190,
     "geological_features": [
-      "Subglacial volcanic centers where basalt magma erupted through limestone/permafrost",
-      "Carbonate globules chemically and structurally identical to those in the ALH84001 Mars meteorite",
-      "Active pingo ice mounds and deep permafrost cores",
-      "Glacier meltwater channels traversing ultramafic rock beds"
+      "AMASE uses Svalbard field sites to test procedures and equipment relevant to searching for life on Mars."
     ],
     "nasa_mission_testing": [
-      "Arctic Mars Analog Svalbard Expedition (AMASE) supported by NASA & ESA",
-      "Field validation of CHEMIN and SAM instruments later flown on Curiosity",
-      "Testing deep-drilling ice probes for cryogenic volatile sampling",
-      "Autonomous rover hazard detection in snow, scree, and cryoturbated soils"
+      "Documents the Svalbard field campaign and life-detection technology testing."
     ],
     "environmental_similarity_profile": {
       "temperature_extreme_score": 0.85,
       "geological_fidelity_score": 0.95,
-      "isolation_and_logistics_score": 0.90,
+      "isolation_and_logistics_score": 0.9,
       "regolith_mechanics_score": 0.79,
       "ice_volatile_relevance_score": 0.93,
       "radiation_exposure_fidelity": 0.38
     },
-    "matched_planetary_targets": ["mars-arcadia-planitia", "luna-shackleton-rim", "luna-connecting-ridge"],
-    "summary": "Svalbard features unique hydrothermal carbonate-basalt volcanism occurring in cryogenic permafrost, replicating the geochemical environments suspected in early Mars and lunar polar cold-traps."
+    "matched_planetary_targets": [
+      "mars-arcadia-planitia",
+      "luna-shackleton-rim",
+      "luna-connecting-ridge"
+    ],
+    "summary": "AMASE uses Svalbard field sites to test procedures and equipment relevant to searching for life on Mars.",
+    "evidence": [
+      {
+        "title": "NASA GSFC: AMASE",
+        "url": "https://science.gsfc.nasa.gov/sci/projects/247/",
+        "claim": "Documents the Svalbard field campaign and life-detection technology testing."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   },
   {
     "id": "earth-lanzarote-geopark",
@@ -147,27 +170,32 @@
     "mean_temp_c": 21.0,
     "annual_precipitation_mm": 110,
     "geological_features": [
-      "Volcán de la Corona lava tube system extending 7.6 km (one of world's largest)",
-      "Unaltered flood basalt flows and hornitos resembling Lunar and Martian shield volcanism",
-      "Stable interior temperature (19°C) sheltered from outside weather",
-      "Spectacular primary volcanic speleothems and basaltic flow benches"
+      "ESA Pangaea training in Lanzarote includes geological sampling in a lava tube."
     ],
     "nasa_mission_testing": [
-      "ESA PANGAEA & PANGAEA-X astronaut geological training campaigns",
-      "Astronaut field exploration using Electronic Field Book (EFB) and handheld spectrometers",
-      "Subsurface communications mesh network deployments without GPS",
-      "Testing autonomous rover 3D SLAM mapping inside completely unlit lava caves"
+      "Documents astronaut geological training and a lava-tube sampling traverse."
     ],
     "environmental_similarity_profile": {
-      "temperature_extreme_score": 0.30,
+      "temperature_extreme_score": 0.3,
       "geological_fidelity_score": 0.97,
       "isolation_and_logistics_score": 0.72,
-      "regolith_mechanics_score": 0.90,
-      "ice_volatile_relevance_score": 0.10,
+      "regolith_mechanics_score": 0.9,
+      "ice_volatile_relevance_score": 0.1,
       "radiation_exposure_fidelity": 0.25
     },
-    "matched_planetary_targets": ["luna-marius-hills-pit", "mars-olympus-mons-cave"],
-    "summary": "Lanzarote's massive basalt lava tubes are the core training ground for ESA and NASA astronauts learning to navigate and establish underground shelters on the Moon and Mars."
+    "matched_planetary_targets": [
+      "luna-marius-hills-pit",
+      "mars-olympus-mons-cave"
+    ],
+    "summary": "ESA Pangaea training in Lanzarote includes geological sampling in a lava tube.",
+    "evidence": [
+      {
+        "title": "ESA: exploring a lava tube",
+        "url": "https://www.esa.int/ESA_Multimedia/Images/2016/11/Exploring_a_lava_tube",
+        "claim": "Documents astronaut geological training and a lava-tube sampling traverse."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   },
   {
     "id": "earth-mcmurdo-dry-valleys",
@@ -181,16 +209,10 @@
     "mean_temp_c": -19.8,
     "annual_precipitation_mm": 10,
     "geological_features": [
-      "Kept snow-free by fierce katabatic winds gusting up to 320 km/h",
-      "Permanently ice-covered hypersaline lakes and subsurface brine reservoirs (Blood Falls)",
-      "Ancient desiccated ventifact sand dunes and patterned frost wedges",
-      "Extremely low microbial biomass; closest terrestrial analog to Martian soil"
+      "The McMurdo Dry Valleys have been used for life-detection instrument research."
     ],
     "nasa_mission_testing": [
-      "NASA planetary protection sterilization protocol verification",
-      "Drill testing of ice-penetrating cryobots for Europa and Martian ice caps",
-      "Autonomous long-baseline rover traversals under continuous daylight",
-      "Radiation dosage monitoring on unshielded polar gravel surfaces"
+      "Identifies the McMurdo Dry Valleys as a life-detection instrument test environment."
     ],
     "environmental_similarity_profile": {
       "temperature_extreme_score": 0.95,
@@ -200,8 +222,19 @@
       "ice_volatile_relevance_score": 0.95,
       "radiation_exposure_fidelity": 0.65
     },
-    "matched_planetary_targets": ["luna-shackleton-rim", "mars-arcadia-planitia", "mars-noctis-labyrinthus"],
-    "summary": "The Antarctic Dry Valleys are the coldest and driest desert on Earth, providing unmatched fidelity for testing cryogenic drilling, closed-loop life support, and extreme polar isolation."
+    "matched_planetary_targets": [
+      "luna-shackleton-rim",
+      "mars-arcadia-planitia",
+      "mars-noctis-labyrinthus"
+    ],
+    "summary": "The McMurdo Dry Valleys have been used for life-detection instrument research.",
+    "evidence": [
+      {
+        "title": "NASA Astrobiology: field sites",
+        "url": "https://astrobiology.nasa.gov/research-locations/",
+        "claim": "Identifies the McMurdo Dry Valleys as a life-detection instrument test environment."
+      }
+    ],
+    "data_status": "Sourced descriptive context; numerical climate values and similarity profiles are unverified illustrative inputs."
   }
 ]
-

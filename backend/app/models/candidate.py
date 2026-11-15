@@ -1,14 +1,37 @@
 from typing import List, Optional, Dict
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel as PydanticBaseModel, Field, ConfigDict, model_validator
 from typing import Literal
+
+class BaseModel(PydanticBaseModel):
+    model_config = ConfigDict(allow_inf_nan=False)
+
+class Evidence(BaseModel):
+    title: str
+    url: str
+    claim: str
+
+
 
 class ISRUPotential(BaseModel):
     water_extraction_rate_kg_per_ton: float = Field(..., description="Estimated water extractable per metric ton of regolith")
     oxygen_extraction_ilmenite_pct: float = Field(..., description="Estimated oxygen yield via hydrogen reduction")
     solar_flux_w_m2: float = Field(..., description="Mean incident solar flux at surface")
 
+class ProvenanceSource(BaseModel):
+    id: str
+    fields: List[str]
+
+class DataProvenance(BaseModel):
+    status: str
+    confidence: str
+    note: str
+    sources: List[ProvenanceSource]
+
 class CandidateSite(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    data_provenance: Optional[DataProvenance] = None
+    evidence: List[Evidence] = Field(default_factory=list)
+    data_status: str = "Scenario inputs, not observed site measurements"
+    measurement_notes: str = ""
     id: str
     name: str
     body: str = Field(..., description="'Moon' or 'Mars'")
@@ -38,6 +61,8 @@ class EnvironmentalSimilarityProfile(BaseModel):
     radiation_exposure_fidelity: float
 
 class EarthAnalog(BaseModel):
+    evidence: List[Evidence] = Field(default_factory=list)
+    data_status: str = "Qualitative sourced context; profile scores are illustrative"
     id: str
     name: str
     location: str
@@ -55,6 +80,11 @@ class EarthAnalog(BaseModel):
     summary: str
 
 class AnalogMatchResult(BaseModel):
+    comparison_status: str = "assumption_based"
+    confidence: str = "unverified"
+    limitations: List[str] = Field(default_factory=lambda: ["Subjective proxy features are not calibrated physical measurements.", "Source links support descriptions, not numerical profile scores."])
+    evidence: List[Evidence] = Field(default_factory=list)
+    data_status: str = "Illustrative profile index; sources support context only"
     analog_id: str
     analog_name: str
     location: str
@@ -66,17 +96,21 @@ class AnalogMatchResult(BaseModel):
     volatiles_score: float
     scientific_rationale: str
     key_analog_activities: List[str]
-    comparison_status: str = "assumption_based"
-    confidence: str = "medium"
-    limitations: List[str] = Field(default_factory=list)
 
 class MCDAWeights(BaseModel):
-    illumination: float = Field(0.25, ge=0, le=1)
-    water_ice: float = Field(0.25, ge=0, le=1)
-    slope_trafficability: float = Field(0.15, ge=0, le=1)
-    earth_communication: float = Field(0.15, ge=0, le=1)
-    radiation_shielding: float = Field(0.10, ge=0, le=1)
-    thermal_stability: float = Field(0.10, ge=0, le=1)
+    model_config = ConfigDict(allow_inf_nan=False, extra="forbid")
+    illumination: float = Field(.25, ge=0, le=1)
+    water_ice: float = Field(.25, ge=0, le=1)
+    slope_trafficability: float = Field(.15, ge=0, le=1)
+    earth_communication: float = Field(.15, ge=0, le=1)
+    radiation_shielding: float = Field(.10, ge=0, le=1)
+    thermal_stability: float = Field(.10, ge=0, le=1)
+
+    @model_validator(mode="after")
+    def positive_total(self):
+        if sum(self.model_dump().values()) <= 0:
+            raise ValueError("At least one criterion must have positive weight")
+        return self
 
 class MCDARankResult(BaseModel):
     site_id: str
@@ -89,18 +123,26 @@ class MCDARankResult(BaseModel):
     primary_vulnerability: str
 
 class SimulationParameters(BaseModel):
-    site_id: str
-    mission_duration_days: int = Field(60, ge=1, le=3650)
-    crew_size: int = Field(4, ge=1, le=20)
-    power_system: Literal["hybrid", "solar_battery", "nuclear_kilopower"] = "hybrid"
-    solar_panel_area_m2: float = Field(350.0, ge=0, le=100000)
-    nuclear_output_kw: float = Field(10.0, ge=0, le=1000)
-    battery_capacity_kwh: float = Field(400.0, gt=0, le=100000)
-    water_recycling_efficiency: float = Field(0.90, ge=0, le=1)
-    isru_excavation_rate_kg_day: float = Field(250.0, ge=0, le=100000)
+    model_config = ConfigDict(allow_inf_nan=False, extra="forbid")
+    site_id: str = Field(min_length=1, max_length=100)
+    mission_duration_days: int = Field(60, ge=1, le=3650, strict=True)
+    crew_size: int = Field(4, ge=1, le=20, strict=True)
+    power_system: Literal["solar_battery", "nuclear_kilopower", "hybrid"] = "hybrid"
+    solar_panel_area_m2: float = Field(350, ge=0, le=100000)
+    nuclear_output_kw: float = Field(10, ge=0, le=1000)
+    battery_capacity_kwh: float = Field(400, gt=0, le=100000)
+    water_recycling_efficiency: float = Field(.90, ge=0, le=1)
+    isru_excavation_rate_kg_day: float = Field(250, ge=0, le=100000)
     radiation_habitat_burial_depth_m: float = Field(1.5, ge=0, le=20)
 
 class SimulationDayTelemetry(BaseModel):
+    water_consumed_net_liters: float = 0
+    electrolysis_feedwater_liters: float = 0
+    oxygen_produced_kg: float = 0
+    water_deficit_liters: float = 0
+    oxygen_deficit_kg: float = 0
+    power_deficit_kwh: float = 0
+
     day: int
     power_generated_kwh: float
     power_consumed_kwh: float
@@ -112,6 +154,15 @@ class SimulationDayTelemetry(BaseModel):
     system_stress_index: float # 0 to 100
 
 class SimulationSummary(BaseModel):
+    execution_mode: Literal["server", "offline_demo"] = "server"
+    warnings: List[str] = Field(default_factory=lambda: ["Scenario inputs and daily budgets are illustrative, not operational predictions."])
+    parameters: SimulationParameters
+    model_version: str = "resource-budget-2"
+    assumptions: List[str] = Field(default_factory=list)
+    first_failure_day: Optional[int] = None
+    initial_water_liters: float = 0
+    initial_oxygen_kg: float = 0
+
     mission_viability_score: float
     status: str # "NOMINAL", "MARGINAL", "CRITICAL"
     total_power_generated_mwh: float
@@ -120,14 +171,13 @@ class SimulationSummary(BaseModel):
     bottlenecks: List[str]
     recommendations: List[str]
     daily_telemetry: List[SimulationDayTelemetry]
-    execution_mode: Literal["server", "offline_demo"] = "server"
-    warnings: List[str] = Field(default_factory=list)
 
 class AIExplanationRequest(BaseModel):
     site_id: str
-    audience_mode: str = "scientific" # "scientific", "educational", "executive"
+    audience_mode: Literal["scientific", "educational", "executive"] = "scientific"
 
 class AIExplanationResponse(BaseModel):
+    evidence: List[Evidence] = Field(default_factory=list)
     site_id: str
     site_name: str
     body: str

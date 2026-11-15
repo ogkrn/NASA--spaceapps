@@ -18,6 +18,7 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    setAnalogs([]);
     matchAnalogsForSite(site.id)
       .then((data) => {
         if (isMounted) {
@@ -45,15 +46,13 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1">
             <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" style={{ animationDuration: "12s" }} />
-            Automated Planetary Analog Discovery Engine
+            Earth Analog Shortlist
           </div>
           <h2 className="text-xl font-bold text-white tracking-tight">
             Terrestrial Proving Grounds for {site.name} ({site.body})
           </h2>
           <p className="text-sm text-slate-300 mt-1 max-w-3xl">
-            Our transparent screening engine compares five proxy dimensions to surface Earth environments that can
-            support rover navigation, drilling, and human habitat operations. Similarity is assumption-based until
-            product-level observations are calibrated on a shared scale.
+            Compare six established analog locations using a declared, subjective profile rule. The index is not measured physical similarity; use source evidence to investigate a specific testing activity.
           </p>
         </div>
 
@@ -70,14 +69,14 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
       {loading ? (
         <div className="flex flex-col items-center justify-center p-16 gap-3 cyber-card rounded-2xl">
           <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
-          <p className="text-sm font-mono text-slate-300">Computing multidimensional environmental distance vectors...</p>
+          <p className="text-sm font-mono text-slate-300">Calculating the illustrative shortlist...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Match Roster Cards */}
           <div className="lg:col-span-5 space-y-3">
             <div className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2 px-1">
-              Top Ranked Terrestrial Analogs ({analogs.length} Screened)
+              Top Ranked Terrestrial Analogs ({analogs.length} Identified)
             </div>
 
             {analogs.map((item, idx) => {
@@ -85,6 +84,7 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
               return (
                 <div
                   key={item.analog_id}
+                  role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActiveAnalogId(item.analog_id); } }}
                   onClick={() => setActiveAnalogId(item.analog_id)}
                   className={`p-4 rounded-xl cursor-pointer transition-all border ${
                     isSelected
@@ -108,9 +108,9 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
 
                     <div className="text-right">
                       <div className="text-lg font-mono font-extrabold text-cyan-300">
-                        {item.overall_similarity_pct}%
+                        {item.overall_similarity_pct}/100
                       </div>
-                      <div className="text-[10px] uppercase font-mono text-slate-400">Similarity</div>
+                      <div className="text-[10px] uppercase font-mono text-slate-400">Index</div>
                     </div>
                   </div>
 
@@ -143,45 +143,33 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
 
                 <div className="bg-cyan-950/70 border border-cyan-800 px-3.5 py-1.5 rounded-xl text-center">
                   <div className="text-xl font-mono font-extrabold text-cyan-300">
-                    {activeAnalog.overall_similarity_pct}%
+                    {activeAnalog.overall_similarity_pct}/100
                   </div>
-                  <div className="text-[10px] uppercase font-mono text-cyan-400">Proxy Match</div>
-                </div>
-
-                <div className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-4">
-                  <div className="text-xs font-mono font-bold text-amber-300">
-                    Assumption-based comparison · {activeAnalog.confidence || "medium"} confidence
-                  </div>
-                  <ul className="mt-2 space-y-1 text-[11px] leading-relaxed text-slate-400">
-                    {(activeAnalog.limitations || [
-                      "Proxy features are not a calibrated measurement of physical equivalence.",
-                      "Validate candidates against product-level NASA and Earth observation data before mission use.",
-                    ]).map((limitation) => <li key={limitation}>• {limitation}</li>)}
-                  </ul>
+                  <div className="text-[10px] uppercase font-mono text-cyan-400">Heuristic index</div>
                 </div>
               </div>
 
               {/* Sub-Score Breakdown Matrix */}
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
-                  Environmental Proxy Dimensions
+                  Illustrative profile components
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
                   <div className="p-3 rounded-xl bg-space-950 border border-space-800">
                     <div className="text-[11px] text-slate-400 mb-1">Topography</div>
-                    <div className="text-base font-bold text-emerald-400">{activeAnalog.topography_score}%</div>
+                    <div className="text-base font-bold text-emerald-400">{activeAnalog.topography_score}/100</div>
                   </div>
                   <div className="p-3 rounded-xl bg-space-950 border border-space-800">
                     <div className="text-[11px] text-slate-400 mb-1">Geology / Regolith</div>
-                    <div className="text-base font-bold text-cyan-400">{activeAnalog.geology_score}%</div>
+                    <div className="text-base font-bold text-cyan-400">{activeAnalog.geology_score}/100</div>
                   </div>
                   <div className="p-3 rounded-xl bg-space-950 border border-space-800">
                     <div className="text-[11px] text-slate-400 mb-1">Thermal Range</div>
-                    <div className="text-base font-bold text-amber-400">{activeAnalog.thermal_score}%</div>
+                    <div className="text-base font-bold text-amber-400">{activeAnalog.thermal_score}/100</div>
                   </div>
                   <div className="p-3 rounded-xl bg-space-950 border border-space-800">
                     <div className="text-[11px] text-slate-400 mb-1">Volatiles / Ice</div>
-                    <div className="text-base font-bold text-purple-400">{activeAnalog.volatiles_score}%</div>
+                    <div className="text-base font-bold text-purple-400">{activeAnalog.volatiles_score}/100</div>
                   </div>
                 </div>
               </div>
@@ -190,17 +178,27 @@ export const AnalogDiscoveryView: React.FC<AnalogDiscoveryViewProps> = ({ site }
               <div className="p-4 rounded-xl bg-space-950/80 border border-cyan-900/50">
                 <div className="text-xs font-mono text-cyan-300 font-bold mb-1.5 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  Mission Commander Justification
+                  How to interpret this index
                 </div>
                 <p className="text-xs text-slate-200 leading-relaxed">
                   {activeAnalog.scientific_rationale}
                 </p>
               </div>
 
-              {/* NASA / Flight Agency Test Protocols */}
+              <section aria-label="Earth analog evidence" className="text-xs space-y-3">
+                <h4 className="text-cyan-300 font-bold">Source evidence and limits</h4>
+                <p className="text-slate-300">{activeAnalog.data_status}</p>
+                <p>Comparison status: {activeAnalog.comparison_status} · {activeAnalog.confidence}</p>
+                <ul>{activeAnalog.limitations.map(item => <li key={item}>• {item}</li>)}</ul>
+                {activeAnalog.evidence.map((source) => <div key={source.url}>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">{source.title} ↗</a>
+                  <p className="text-slate-300 mt-1">{source.claim}</p>
+                </div>)}
+                <p className="text-slate-400">Earth does not reproduce lunar vacuum, reduced gravity, Martian atmospheric pressure or space radiation. These locations support selected experiments only.</p>
+              </section>
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
-                  Established NASA / ESA Field Protocols at this Analog
+                  Sourced activity context
                 </h4>
                 <div className="space-y-2">
                   {activeAnalog.key_analog_activities.map((act, i) => (

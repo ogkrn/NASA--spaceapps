@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "ARES-LUNA Planetary Analog Intelligence & Mission Simulator"
@@ -10,16 +10,7 @@ class Settings(BaseSettings):
     BASE_DIR: Path = Path(__file__).resolve().parent
     DATA_DIR: Path = BASE_DIR / "data"
     
-    CORS_ORIGINS: list[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "*"
-    ]
-
-    class Config:
-        env_file = ".env"
-        extra = "allow"
+    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
-

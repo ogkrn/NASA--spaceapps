@@ -81,3 +81,6 @@ body {
   background: #38bdf8;
 }
 
+
+button:focus-visible, [role=button]:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #22d3ee; outline-offset: 3px; }
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}

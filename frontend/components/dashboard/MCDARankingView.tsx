@@ -25,11 +25,13 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
 }) => {
   const [weights, setWeights] = useState<MCDAWeights>(DEFAULT_WEIGHTS);
   const [ranks, setRanks] = useState<MCDARankResult[]>([]);
+  const weightTotal = Object.values(weights).reduce((sum, value) => sum + value, 0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    setRanks([]);
     runMCDA(weights, currentPlanet)
       .then((data) => {
         if (isMounted) {
@@ -61,11 +63,11 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
             Intermediate-Level Multi-Criteria Decision Analysis (TOPSIS Engine)
           </div>
           <h2 className="text-xl font-bold text-white tracking-tight">
-            Scientific Outpost Suitability Ranking for {currentPlanet}
+            Illustrative Priority Ranking for {currentPlanet}
           </h2>
           <p className="text-sm text-slate-300 mt-1 max-w-3xl">
             Evaluate and prioritize settlement candidate sites by dynamically weighting the 6 critical planetary engineering
-            attributes. Computes Euclidean distance to the theoretical ideal positive and negative solutions ($C_i$).
+            attributes. Uses TOPSIS on the declared scenario inputs. This is not a measured site-safety ranking.
           </p>
         </div>
 
@@ -86,12 +88,12 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
               <Sliders className="w-4 h-4 text-purple-400" />
               Weight Sensitivity Tuner
             </h3>
-            <span className="text-[10px] font-mono text-slate-400">Total: 100%</span>
+            <span className="text-[10px] font-mono text-slate-400">Normalized total: {weightTotal > 0 ? "100%" : "choose a weight"}</span>
           </div>
 
           {[
             { key: "illumination", label: "Solar Illumination", val: weights.illumination, color: "accent-amber-400" },
-            { key: "water_ice", label: "Water Ice Confidence", val: weights.water_ice, color: "accent-cyan-400" },
+            { key: "water_ice", label: "Ice-access assumption", val: weights.water_ice, color: "accent-cyan-400" },
             { key: "slope_trafficability", label: "Terrain Trafficability", val: weights.slope_trafficability, color: "accent-emerald-400" },
             { key: "earth_communication", label: "Direct Earth Comms", val: weights.earth_communication, color: "accent-blue-400" },
             { key: "radiation_shielding", label: "Radiation Shielding", val: weights.radiation_shielding, color: "accent-purple-400" },
@@ -100,9 +102,9 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
             <div key={item.key}>
               <div className="flex justify-between text-xs font-mono mb-1">
                 <span className="text-slate-300">{item.label}</span>
-                <span className="text-purple-300 font-bold">{Math.round(item.val * 100)}%</span>
+                <span className="text-purple-300 font-bold">{Math.round(item.val / weightTotal * 100)}%</span>
               </div>
-              <input
+              <input aria-label={item.label}
                 type="range"
                 min={0.05}
                 max={0.50}
@@ -122,10 +124,10 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
           <div className="flex items-center justify-between border-b border-space-700 pb-3">
             <h3 className="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-400" />
-              TOPSIS Suitability Ranks ({ranks.length} Candidates Evaluated)
+              TOPSIS Scenario Ranks ({ranks.length} Candidates Evaluated)
             </h3>
             <span className="text-[10px] font-mono text-cyan-300 bg-space-950 px-2 py-0.5 rounded border border-space-800">
-              Closeness Index $C_i \in [0, 1]$
+              Relative priority index (0–1)
             </span>
           </div>
 
@@ -141,6 +143,7 @@ export const MCDARankingView: React.FC<MCDARankingViewProps> = ({
                 return (
                   <div
                     key={r.site_id}
+                    role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectSiteId(r.site_id); } }}
                     onClick={() => onSelectSiteId(r.site_id)}
                     className={`p-4 rounded-xl cursor-pointer transition-all border ${
                       isFirst

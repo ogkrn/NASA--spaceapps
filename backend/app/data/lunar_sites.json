@@ -14,23 +14,31 @@
     "thermal_min_k": 40,
     "thermal_max_k": 220,
     "natural_radiation_shielding_pct": 12.0,
-    "geological_context": "Impact crater rim bordering a Permanently Shadowed Region (PSR). Direct access to ultra-cold volatile/water-ice traps within 2.5 km traverse distance. Basaltic anorthosite regolith.",
+    "geological_context": "Shackleton is a south-polar crater investigated using orbital observations. Possible ice-related reflectance is not a measured probability of extractable water at a landing point.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 55.0,
       "oxygen_extraction_ilmenite_pct": 8.2,
       "solar_flux_w_m2": 1361
     },
     "hazards": [
-      "Steep 30-degree slopes into crater interior requiring tethered rover systems",
-      "Cryogenic temperatures in shadow (-233°C / 40K)",
-      "Low sun elevation angles causing severe elongated shadows"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Key Artemis III/IV exploration candidate; cold traps preserve primordial solar system volatile delivery records.",
-    "recommended_analog_type": "polar_crater"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "polar_crater",
+    "evidence": [
+      {
+        "title": "NASA NTRS: lunar polar resource context",
+        "url": "https://ntrs.nasa.gov/api/citations/20140002548/downloads/20140002548.pdf",
+        "claim": "Discusses LRO evidence and interpretations of Shackleton surface ice; no 94% water-access probability is supplied."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "luna-malapert-mountain",
-    "name": "Malapert Mountain (Peak of Eternal Light)",
+    "name": "Malapert region (illustrative scenario)",
     "body": "Moon",
     "region": "South Pole",
     "latitude": -85.99,
@@ -43,19 +51,32 @@
     "thermal_min_k": 150,
     "thermal_max_k": 235,
     "natural_radiation_shielding_pct": 10.0,
-    "geological_context": "Elevated massif providing near-continuous solar illumination and uninterrupted line-of-sight communication with Earth. 15 km from Faustini crater ice deposits.",
+    "geological_context": "Malapert Massif appears in NASA candidate-region studies. This catalog marker and scenario do not establish continuous sunlight or a safe landing site.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 32.0,
       "oxygen_extraction_ilmenite_pct": 9.5,
       "solar_flux_w_m2": 1361
     },
     "hazards": [
-      "Transit distance to permanently shadowed water ice (>12 km)",
-      "Micrometeorite exposure due to high topographic prominence",
-      "Electrostatic regolith lofting along terminator"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Optimal telecommunications relay & early power station node for lunar polar network.",
-    "recommended_analog_type": "high_altitude_plateau"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "high_altitude_plateau",
+    "evidence": [
+      {
+        "title": "NASA: Artemis candidate-region study (2024 historical list)",
+        "url": "https://science.nasa.gov/wp-content/uploads/2024/09/1-2-artemis-sato-2024-1.pdf",
+        "claim": "The historical study includes Connecting Ridge, Faustini Rim A and Malapert Massif; it does not validate this app's exact point locations or engineering inputs."
+      },
+      {
+        "title": "NASA: refined landing regions (2024)",
+        "url": "https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/",
+        "claim": "Names Malapert Massif among refined regions; selection was not a ranking or a certification of these app inputs."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "luna-marius-hills-pit",
@@ -72,19 +93,32 @@
     "thermal_min_k": 253,
     "thermal_max_k": 253,
     "natural_radiation_shielding_pct": 99.4,
-    "geological_context": "Subsurface collapsed volcanic lava conduit (skylight). Vast subterranean void (~100m wide, 40m ceiling) formed by ancient mare basalt volcanic flows.",
+    "geological_context": "Orbital images identify the Marius Hills pit. Its relationship to subsurface voids is an exploration question; structural integrity and habitable conditions are not established here.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 4.0,
       "oxygen_extraction_ilmenite_pct": 14.8,
       "solar_flux_w_m2": 1361
     },
     "hazards": [
-      "Vertical shaft ingress/egress requiring hoists or elevator systems",
-      "Complete darkness within subsurface tube requiring artificial illumination and beamed power",
-      "No direct in-situ water ice"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Perfect natural radiation, micrometeorite, and thermal shelter for long-duration permanent settlement.",
-    "recommended_analog_type": "lava_tube"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "lava_tube",
+    "evidence": [
+      {
+        "title": "NASA: Lunar pits and thermal research",
+        "url": "https://www.nasa.gov/solar-system/nasas-lro-finds-lunar-pits-harbor-comfortable-temperatures/",
+        "claim": "LRO observations and modelling motivate investigating lunar pits; the approximately 17 C model result concerns the Tranquillitatis pit, not a confirmed Marius Hills habitat."
+      },
+      {
+        "title": "LROC Pits Atlas: Marius Hills",
+        "url": "https://www.lroc.im-ldi.com/atlases/pits/1",
+        "claim": "Catalogued pit location, not a certified habitat or shielding percentage."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "luna-connecting-ridge",
@@ -101,19 +135,27 @@
     "thermal_min_k": 90,
     "thermal_max_k": 225,
     "natural_radiation_shielding_pct": 15.0,
-    "geological_context": "Narrow morphological ridge connecting two major polar impact structures. Excellent multi-directional traverse pathways for pressurized rovers.",
+    "geological_context": "Connecting Ridge appears in the historical NASA Artemis candidate-region study. It is retained as a comparison scenario, not represented as a current selected landing site.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 44.0,
       "oxygen_extraction_ilmenite_pct": 8.8,
       "solar_flux_w_m2": 1361
     },
     "hazards": [
-      "Narrow landing corridor bounded by steep declivities",
-      "Occasional eclipse events (lunar dusk) requiring 54-72 hours of battery reserve",
-      "Severe abrasive regolith wear on rover seals"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "Artemis III designated science area; provides dual access to both Shackleton and de Gerlache micro-environments.",
-    "recommended_analog_type": "polar_crater"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "polar_crater",
+    "evidence": [
+      {
+        "title": "NASA: Artemis candidate-region study (2024 historical list)",
+        "url": "https://science.nasa.gov/wp-content/uploads/2024/09/1-2-artemis-sato-2024-1.pdf",
+        "claim": "The historical study includes Connecting Ridge, Faustini Rim A and Malapert Massif; it does not validate this app's exact point locations or engineering inputs."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   },
   {
     "id": "luna-faustini-rim",
@@ -130,19 +172,26 @@
     "thermal_min_k": 55,
     "thermal_max_k": 218,
     "natural_radiation_shielding_pct": 18.0,
-    "geological_context": "Complex degraded impact crater harboring extensive radar-reflective volatile deposits verified by LRO Mini-RF and LAMP instruments.",
+    "geological_context": "Faustini Rim A appears in the historical NASA candidate-region study. This app does not establish an extractable water reserve or a present-day approved site.",
     "isru_potential": {
       "water_extraction_rate_kg_per_ton": 51.0,
       "oxygen_extraction_ilmenite_pct": 7.9,
       "solar_flux_w_m2": 1361
     },
     "hazards": [
-      "Moderate direct-to-Earth communication occultation during lunar librations",
-      "Cryogenic frost migration hazards on solar panel hinges",
-      "Loose anorthositic scree slope instability"
+      "Landing, terrain access and structural stability require site-specific investigation.",
+      "Water extraction, power continuity and radiation protection are not validated by this scenario."
     ],
-    "scientific_significance": "High concentration of organic volatiles and nitrogen-bearing compounds trapped alongside water ice.",
-    "recommended_analog_type": "polar_crater"
+    "scientific_significance": "Potential exploration context. Compare the linked observations with the separate illustrative scenario; no settlement suitability is established.",
+    "recommended_analog_type": "polar_crater",
+    "evidence": [
+      {
+        "title": "NASA: Artemis candidate-region study (2024 historical list)",
+        "url": "https://science.nasa.gov/wp-content/uploads/2024/09/1-2-artemis-sato-2024-1.pdf",
+        "claim": "The historical study includes Connecting Ridge, Faustini Rim A and Malapert Massif; it does not validate this app's exact point locations or engineering inputs."
+      }
+    ],
+    "data_status": "Sourced descriptive context; ALL engineering numbers below are illustrative scenario inputs.",
+    "measurement_notes": "Catalog coordinates are approximate orientation markers unless a linked source explicitly supports them. Numerical probabilities, yields, shielding, slope and thermal ranges inherited from the prototype are not verified observations."
   }
 ]
-

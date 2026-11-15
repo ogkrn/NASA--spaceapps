@@ -95,7 +95,7 @@ class AnalogMatcherEngine:
             type_bonus = 0.10 if analog.get("analog_type") == site.get("recommended_analog_type") else 0.0
 
             raw_score = (cosine_sim * 0.82) + target_bonus + type_bonus
-            overall_pct = round(min(98.5, max(42.0, raw_score * 100)), 1)
+            overall_pct = round(min(100.0, max(0.0, raw_score * 100)), 1)
 
             # Sub-scores
             topo_score = round(min(1.0, 1.0 - abs(v_site[1] - v_analog[1])) * 100, 1)
@@ -109,6 +109,8 @@ class AnalogMatcherEngine:
             results.append(
                 AnalogMatchResult(
                     analog_id=analog["id"],
+                    evidence=analog.get("evidence", []),
+                    data_status=analog.get("data_status", "Illustrative profile index"),
                     analog_name=analog["name"],
                     location=analog["location"],
                     country=analog["country"],
@@ -118,14 +120,7 @@ class AnalogMatcherEngine:
                     thermal_score=therm_score,
                     volatiles_score=vol_score,
                     scientific_rationale=rationale,
-                    key_analog_activities=analog["nasa_mission_testing"],
-                    comparison_status="assumption_based",
-                    confidence="medium",
-                    limitations=[
-                        "Earth analog profile values are catalogue estimates, not a shared calibrated measurement scale.",
-                        "Slope, regolith mechanics, thermal extremes, and geology are compared through proxy features.",
-                        "This ranking is a screening aid, not proof that the sites are physically equivalent.",
-                    ],
+                    key_analog_activities=analog["nasa_mission_testing"]
                 )
             )
 
@@ -134,33 +129,9 @@ class AnalogMatcherEngine:
         return results[:top_k]
 
     def _generate_match_rationale(self, site: Dict[str, Any], analog: Dict[str, Any], score: float) -> str:
-        site_name = site["name"]
-        analog_name = analog["name"]
-        a_type = analog.get("analog_type")
-        s_type = site.get("recommended_analog_type")
-
-        if a_type == s_type and a_type == "lava_tube":
-            return (
-                f"Exceptional morphological analog. Both {site_name} and {analog_name} feature pristine "
-                f"uncollapsed basaltic lava conduits. {analog_name} enables direct calibration of LiDAR SLAM, "
-                f"subterranean habitat erection, and dust filtration in basalt voids prior to flight."
-            )
-        elif a_type == s_type and a_type == "polar_crater":
-            return (
-                f"High-fidelity polar desert analog. The permafrost and impact breccia at {analog_name} "
-                f"closely replicate the cryogenic regolith and cold-trap conditions at {site_name}, "
-                f"making it ideal for validating tethered rover traverse and cryogenic core drilling."
-            )
-        elif a_type == "hyper_arid_canyon":
-            return (
-                f"Crucial geochemical testbed. The hyper-arid soils and perchlorate chemistry at {analog_name} "
-                f"reproduce the oxidative hazards found at {site_name}, facilitating life-detection validation."
-            )
-        else:
-            return (
-                f"{analog_name} demonstrates a {score}% operational and environmental alignment with {site_name}, "
-                f"offering realistic crew isolation, harsh mechanical wear, and field logistics testing."
-            )
+        return (f"{analog['name']} scores {score}/100 under the illustrative profile rule for {site['name']}. "
+                "This is a subjective screening index, not measured environmental similarity. "
+                "The profile dimensions are not calibrated physical measurements; target/type bonuses influence order. "
+                "Consult the linked site evidence and verify suitability for the specific experiment.")
 
 analog_matcher = AnalogMatcherEngine()
-

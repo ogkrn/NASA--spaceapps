@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { CandidateSite } from "@/lib/types";
 
@@ -19,6 +19,11 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const isMoon = planet === "Moon";
+  const selectionRef = useRef(selectedSiteId);
+  const onSelectRef = useRef(onSelectSite);
+  const [webglError, setWebglError] = useState(false);
+  selectionRef.current = selectedSiteId;
+  onSelectRef.current = onSelectSite;
 
   useEffect(() => {
     const currentMount = mountRef.current;
@@ -32,7 +37,10 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.z = 3.6;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); setWebglError(false); }
+    catch { setWebglError(true); return; }
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     currentMount.appendChild(renderer.domElement);
@@ -136,9 +144,11 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
 
     const textureLoader = new THREE.TextureLoader();
     let remoteTexture: THREE.Texture | null = null;
+    let disposed = false;
     textureLoader.load(
       textureUrl,
       (texture) => {
+        if (disposed) { texture.dispose(); return; }
         remoteTexture = texture;
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
@@ -198,8 +208,8 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
         opacity: isSelected ? 0.8 : 0.4,
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.copy(pos.clone().multiplyScalar(1.01));
-      ring.lookAt(pos.clone().multiplyScalar(2));
+      ring.position.copy(pos.clone().normalize().multiplyScalar(.012));
+      ring.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1), pos.clone().normalize());
       marker.add(ring);
 
       markerGroup.add(marker);
@@ -237,19 +247,23 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
 
     // 8. Interaction (Drag to Rotate & Click site)
     let isDragging = false;
+    let moved = false;
+    let startX = 0, startY = 0;
     let prevMouseX = 0;
     let prevMouseY = 0;
     let rotationVelocityX = 0.0015;
     let rotationVelocityY = 0;
 
-    const onMouseDown = (e: MouseEvent) => {
-      isDragging = true;
+    const onMouseDown = (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      isDragging = true; moved = false; startX = e.clientX; startY = e.clientY;
       prevMouseX = e.clientX;
       prevMouseY = e.clientY;
     };
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onMouseMove = (e: PointerEvent) => {
       if (!isDragging) return;
+      if (Math.abs(e.clientX-startX)+Math.abs(e.clientY-startY)>5) moved = true;
       const deltaX = e.clientX - prevMouseX;
       const deltaY = e.clientY - prevMouseY;
       prevMouseX = e.clientX;
@@ -272,13 +286,14 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
     const mouse = new THREE.Vector2();
 
     const onClick = (e: MouseEvent) => {
+      if (moved) return;
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(markerGroup.children, true);
-      if (intersects.length > 0) {
+      const intersects = raycaster.intersectObjects([planetMesh, ...markerGroup.children], true);
+      if (intersects.length > 0 && intersects[0].object !== planetMesh) {
         let hit = intersects[0].object;
         while (hit.parent && hit.parent !== markerGroup) {
           hit = hit.parent as THREE.Mesh;
@@ -286,15 +301,17 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
         const siteId = hit.userData.siteId;
         const matched = sites.find((s) => s.id === siteId);
         if (matched) {
-          onSelectSite(matched);
+          onSelectRef.current(matched);
         }
       }
     };
 
     const dom = renderer.domElement;
-    dom.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    dom.style.touchAction = "none";
+    window.addEventListener("pointercancel", onMouseUp);
+    dom.addEventListener("pointerdown", onMouseDown);
+    window.addEventListener("pointermove", onMouseMove);
+    window.addEventListener("pointerup", onMouseUp);
     dom.addEventListener("click", onClick);
 
     // Handle Resize
@@ -313,7 +330,12 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      if (!isDragging) {
+      if (document.hidden) return;
+      for (const {mesh, site} of markerMeshes) {
+        const selected = selectionRef.current === site.id;
+        (mesh.material as THREE.MeshBasicMaterial).color.setHex(selected ? 0x22d3ee : isMoon ? 0x38bdf8 : 0xf97316);
+      }
+      if (!isDragging && !reducedMotion.matches) {
         planetMesh.rotation.y += rotationVelocityX;
         markerGroup.rotation.y += rotationVelocityX;
         orbitGroup.rotation.y -= rotationVelocityX * 0.35;
@@ -325,46 +347,46 @@ export const PlanetaryGlobe: React.FC<PlanetaryGlobeProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
-      dom.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      dom.removeEventListener("pointerdown", onMouseDown);
+      window.removeEventListener("pointermove", onMouseMove);
+      window.removeEventListener("pointerup", onMouseUp);
       dom.removeEventListener("click", onClick);
       window.removeEventListener("resize", handleResize);
       if (currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
+      window.removeEventListener("pointercancel", onMouseUp);
+      scene.traverse(object => {
+        const mesh = object as THREE.Mesh;
+        if (mesh.geometry) mesh.geometry.dispose();
+        if (mesh.material) (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).forEach(m => m.dispose());
+      });
+      disposed = true;
       fallbackTexture.dispose();
       remoteTexture?.dispose();
-      orbitGroup.traverse((object) => {
-        if (object instanceof THREE.Line) {
-          object.geometry.dispose();
-          (object.material as THREE.Material).dispose();
-        }
-      });
-      sphereGeo.dispose();
-      sphereMat.dispose();
       renderer.dispose();
     };
-  }, [planet, sites, selectedSiteId, isMoon, onSelectSite]);
+  }, [planet, sites, isMoon]);
 
   return (
     <div className="relative w-full h-[600px] rounded-2xl overflow-hidden cyber-card border border-space-700/60 bg-gradient-to-b from-black via-space-950 to-space-950 flex flex-col">
       {/* 3D Header Overlay */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-space-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-space-700 text-xs font-mono text-slate-300">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-        <span>LIVE {planet.toUpperCase()} ORBITAL VIEW</span>
+        <span>{planet.toUpperCase()} VISUAL REFERENCE</span>
         <span className="text-slate-500">| Drag to rotate · Click nodes</span>
       </div>
 
       <div className="absolute top-4 right-4 z-10 flex items-center gap-2 text-[10px] font-mono text-slate-300 bg-black/60 px-2.5 py-1 rounded border border-space-800">
         <span className={`w-1.5 h-1.5 rounded-full ${isMoon ? "bg-cyan-400" : "bg-orange-400"} animate-pulse`} />
-        REAL PLANET MAP · VISUAL REFERENCE
+        EXTERNAL TEXTURE / PROCEDURAL FALLBACK
       </div>
 
       <div className="absolute bottom-4 left-4 z-10 text-[11px] font-mono text-slate-400 bg-black/70 px-2.5 py-1 rounded border border-space-800">
-        Solar irradiance: {isMoon ? "1361 W/m²" : "590 W/m²"} · {sites.length} tracked nodes · Orbit tracks active
+        Fixed lighting · {sites.length} scenario markers · decorative orbit tracks
       </div>
 
+      {webglError && <p role="status" className="absolute inset-0 p-20 text-center">3D rendering is unavailable on this device. Select a site from the cards below; all analysis remains available.</p>}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
     </div>
   );

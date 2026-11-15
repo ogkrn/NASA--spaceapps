@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CandidateSite, AIExplanationResponse } from "@/lib/types";
 import { fetchAIExplanation } from "@/lib/api";
 import { 
@@ -26,32 +26,60 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
   onClose,
   initialMode = "scientific",
 }) => {
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  const dialog = useRef<HTMLDivElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
   const [audienceMode, setAudienceMode] = useState<"scientific" | "educational" | "executive">(initialMode);
   const [explanation, setExplanation] = useState<AIExplanationResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!isOpen) return;
+    let active = true;
+    setExplanation(null);
     setLoading(true);
     fetchAIExplanation(site.id, audienceMode)
       .then((data) => {
+        if (!active) return;
         setExplanation(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("AI Explain error", err);
+        if (!active) return;
+        console.error("Briefing error", err);
         setLoading(false);
       });
+    return () => { active = false; };
   }, [site.id, audienceMode, isOpen]);
+
+  useEffect(() => { if (isOpen) setAudienceMode(initialMode); }, [isOpen, initialMode]);
+  useEffect(() => {
+    if (!isOpen) return;
+    const previous = document.activeElement as HTMLElement | null;
+    closeButton.current?.focus();
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCloseRef.current();
+      if (e.key === "Tab") {
+        const items = dialog.current?.querySelectorAll<HTMLElement>("button, a[href], [tabindex=\"0\"]");
+        if (!items?.length) return;
+        const first = items[0], last = items[items.length-1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener("keydown", key);
+    return () => { document.removeEventListener("keydown", key); previous?.focus(); };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-space-950/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl cyber-card border border-cyan-500/40 bg-space-950/95 p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div ref={dialog} role="dialog" aria-modal="true" aria-label="Site evidence briefing" className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl cyber-card border border-cyan-500/40 bg-space-950/95 p-6 sm:p-8 space-y-6 shadow-2xl">
         {/* Close Button */}
         <button
-          onClick={onClose}
+          ref={closeButton} aria-label="Close briefing" onClick={onClose}
           className="absolute top-6 right-6 p-2 rounded-xl bg-space-900 border border-space-700 text-slate-400 hover:text-white transition-all"
         >
           <X className="w-5 h-5" />
@@ -61,7 +89,7 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            Evidence-Based Planetary Briefing · Multi-Criteria Synthesis
+            Source-linked Site Briefing · Deterministic Explanation
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
             {site.name} ({site.body})
@@ -101,7 +129,7 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
         {loading ? (
           <div className="flex flex-col items-center justify-center p-16 gap-3">
             <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
-            <p className="text-sm font-mono text-slate-300">Generating AI planetary synthesis...</p>
+            <p className="text-sm font-mono text-slate-300">Loading evidence briefing...</p>
           </div>
         ) : explanation ? (
           <div className="space-y-5">
@@ -109,11 +137,6 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
             <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-800/60">
               <h3 className="text-base font-bold text-cyan-200 mb-1">{explanation.headline}</h3>
               <p className="text-xs text-slate-300 leading-relaxed">{explanation.suitability_verdict}</p>
-            </div>
-            <div className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-3 text-[11px] leading-relaxed text-amber-200">
-              This briefing is generated from the curated catalogue and NASA resource families shown in the
-              site&apos;s provenance panel. It is not a live AI model output and does not replace product-level
-              scientific validation.
             </div>
 
             {/* Geological Narrative */}
@@ -155,6 +178,13 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
               </ul>
             </div>
 
+            <section className="space-y-2 text-xs" aria-label="Briefing evidence">
+              <h4 className="text-cyan-300 font-bold">Sources for this description</h4>
+              {explanation.evidence.map(source => <div key={source.url}>
+                <a className="underline text-cyan-300" href={source.url} target="_blank" rel="noopener noreferrer">{source.title} ↗</a>
+                <p className="text-slate-300">{source.claim}</p>
+              </div>)}
+            </section>
             {/* Educational Takeaways */}
             <div>
               <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
@@ -170,7 +200,7 @@ export const AIExplanationModal: React.FC<AIExplanationModalProps> = ({
               </div>
             </div>
           </div>
-        ) : null}
+        ) : <p role="alert">Briefing unavailable. Check the connection notice and retry by reopening this panel.</p>}
       </div>
     </div>
   );

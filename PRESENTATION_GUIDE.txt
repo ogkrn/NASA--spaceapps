@@ -1,345 +1,88 @@
-ARES-LUNA
-Planetary Analog Intelligence and Mission Simulation
-NASA Space Apps Challenge 2026 Presentation Guide
-
+ARES-LUNA — evidence and exploration scenarios
+Presentation guide aligned with Package A rebased on e1d0aaa
 
 1. THE PROBLEM IN SIMPLE WORDS
-
-NASA wants to build permanent human bases on the Moon and eventually send people to Mars.
-Before sending astronauts, NASA must test rovers, spacesuits, habitats, drills, scientific
-instruments, navigation systems, and life-support technology.
-
-Testing directly on the Moon or Mars is expensive, dangerous, and difficult. Earth can be
-used as a testing laboratory, but only if we choose Earth locations that are scientifically
-similar to the target environment.
-
-A place can look like Mars and still be a poor analog. A desert may have the wrong minerals,
-temperature range, terrain, radiation conditions, ice conditions, or soil behavior.
-
-The challenge is therefore:
-
-Find and compare Earth locations that can help test lunar and Martian technologies, while
-also helping scientists evaluate possible Moon and Mars settlement locations.
-
+Earth environments can help test selected aspects of Moon and Mars exploration.
+Visual resemblance alone is not enough. A useful analog must suit a specific
+experiment, and its differences from the planetary environment must be explained.
 
 2. OUR SOLUTION
-
-ARES-LUNA is an interactive decision-support prototype for planetary settlement planning.
-
-It answers three practical questions:
-
-1. Which lunar or Martian locations deserve attention?
-2. Which Earth environments are useful for testing technology for those locations?
-3. Would a proposed crew, power system, water loop, and habitat plan remain viable?
-
-The important idea is that ARES-LUNA does not say that Earth and another planet are identical.
-It shows a transparent, assumption-based comparison and explains what still needs to be
-validated with real mission products.
-
+An interactive prototype connecting descriptions of known Earth analogs with
+Moon/Mars scenario comparisons and a daily resource-budget exercise. We separate
+source-supported descriptions from unverified engineering assumptions.
 
 3. HOW A USER USES THE PROJECT
-
-Step 1: Choose the Moon or Mars.
-
-Step 2: Explore candidate landing and settlement locations on the interactive 3D globe.
-
-Step 3: Select a site and review the main decision factors:
-        - sunlight or solar illumination
-        - water-ice or subsurface volatile potential
-        - slope and terrain trafficability
-        - communication visibility
-        - natural radiation shielding
-        - thermal range
-
-Step 4: Open Earth Analogs.
-
-The analog engine ranks Earth environments using several proxy dimensions, such as:
-        - topography
-        - geological or regolith context
-        - thermal range
-        - volatile or ice relevance
-        - isolation and logistics context
-
-The result is a shortlist of places where NASA-style rover, drilling, sampling, mobility,
-habitat, or field-science tests could be performed.
-
-Step 5: Open the Mission Simulator.
-
-The user changes:
-        - mission duration
-        - crew size
-        - hybrid, solar, or nuclear power
-        - battery capacity
-        - water recycling efficiency
-        - regolith excavation rate
-        - habitat burial depth for radiation shielding
-
-The simulator produces day-by-day telemetry for power, battery charge, water, oxygen,
-radiation, and system stress. It also reports bottlenecks and recommendations.
-
-Step 6: Use the explanation and education modes.
-
-The project provides a plain-language evidence briefing, lessons about lunar and Martian
-survival engineering, and a short knowledge quiz. This makes the scientific ideas easier
-for judges, students, and non-specialists to understand.
-
+Choose Moon or Mars, select a site card or globe marker, read the source evidence,
+compare Earth analogs, adjust ranking priorities, and run a resource-budget scenario.
+Inspect deficits and assumptions, not just the headline indicator. Use educational
+mode and the deterministic briefing for accessible explanations.
 
 4. WHAT WE BUILT
-
-Candidate site explorer:
-    A Moon and Mars catalogue with settlement-relevant environmental fields.
-
-Multi-criteria ranking:
-    A TOPSIS-style decision engine ranks sites according to user-selected weights.
-    This lets a user decide whether sunlight, water, slope, communication, shielding, or
-    thermal stability is most important.
-
-Automated analog discovery:
-    A vector-based screening engine compares target sites with Earth analogues and returns
-    ranked matches plus a scientific rationale.
-
-3D visualization:
-    A Three.js WebGL globe displays planetary candidate locations and lets the user select
-    a landing node.
-
-Mission simulator:
-    A Python/FastAPI engine models simplified power, consumables, water recycling, oxygen
-    balance, radiation accumulation, battery behavior, and mission bottlenecks.
-
-Evidence briefings:
-    The application creates site-specific scientific, educational, and executive summaries.
-    These are transparent application briefings, not claims of a live NASA-certified AI model.
-
-Educational exploration:
-    Interactive lessons explain sunlight, permanently shadowed regions, water, radiation,
-    lava tubes, ISRU, and why Earth analogs matter.
-
-Data provenance:
-    The interface identifies the NASA resource families connected to each group of fields,
-    shows confidence labels, and explains when values are catalogue screening values.
-
-Offline demonstration mode:
-    If the backend is unavailable, the interface can still demonstrate the product using
-    embedded values. The UI labels this as offline demo data instead of silently presenting
-    it as live scientific output.
-
+Nine planetary scenarios, six known Earth analogs, a six-priority TOPSIS ranking,
+a subjective analog-profile shortlist, three power modes, water/oxygen/power
+accounting, daily telemetry, source-linked briefings, lessons and a quiz.
+The globe uses external visual textures when available and a procedural fallback.
+Its lighting and orbital tracks are illustrative, not live mission telemetry.
+A calculation service failure is reported explicitly; results are not invented.
 
 5. NASA AND SPACE-AGENCY RESOURCES
-
-The prototype uses the following official resource families as the scientific data
-foundation and provenance references:
-
-NASA Earthdata:
-    Earth observation, terrain, climate, and analog-environment context.
-
-NASA Planetary Data System (PDS):
-    Long-term archive and provenance reference for planetary mission products.
-
-Lunar Reconnaissance Orbiter (LRO) Diviner:
-    Lunar surface temperature and thermal environment context, including permanently
-    shadowed region analysis.
-
-Lunar Reconnaissance Orbiter (LRO) LOLA:
-    Lunar laser altimetry, elevation, terrain, and slope context.
-
-Mars Reconnaissance Orbiter (MRO) HiRISE:
-    High-resolution Mars surface imagery and terrain context.
-
-Mars Reconnaissance Orbiter (MRO) CRISM:
-    Mars mineralogical and spectral context.
-
-Mars Reconnaissance Orbiter (MRO) SHARAD:
-    Mars subsurface radar context, including buried ice and subsurface layers.
-
-JAXA SELENE/Kaguya:
-    Supplementary lunar topography and surface context.
-
-Earth analog and field campaign context includes:
-    NASA Haughton-Mars Project on Devon Island
-    HI-SEAS and volcanic environments in Hawaii
-    Atacama Desert field testing
-    AMASE in Svalbard
-    ESA PANGAEA training in Lanzarote
-    McMurdo Dry Valleys in Antarctica
-
-Important honesty point:
-The current prototype is a scientifically transparent catalogue and screening system.
-It references the official NASA resource families, but it does not yet claim that every
-displayed number was downloaded directly from a specific NASA product. Product identifiers,
-retrieval timestamps, calibration metadata, and uncertainty ranges still need to be added
-for operational scientific use.
-
+Claim-level NASA, ESA and USGS links support descriptive site context. The separate
+resource registry lists archives useful for future measurement extraction. An
+archive link does not validate a numerical value. No NASA product download or
+measurement extraction is implemented. The catalog script checks record structure
+and emits a manifest with empty product identifiers; it is not scientific validation.
 
 6. TECHNOLOGY USED
-
-Frontend:
-    Next.js 14
-    React
-    TypeScript
-    Tailwind CSS
-    Three.js
-    Recharts and Lucide icons
-
-Backend:
-    Python
-    FastAPI
-    Pydantic
-    NumPy
-    Pandas
-    SciPy
-    Scikit-learn
-
-Scientific modules:
-    Candidate-site catalogue
-    TOPSIS-style multi-criteria decision analysis
-    Environmental analog matching
-    Spherical geospatial calculations
-    Simplified mission physics and life-support accounting
-
-API:
-    REST endpoints connect the frontend to candidate sites, analogs, rankings, simulation,
-    explanations, and resource provenance.
-
+Next.js, React, TypeScript and Three.js frontend; FastAPI, Pydantic and NumPy backend;
+local JSON catalogs. No paid API, trained model, generative service or database is
+required. Dependency installation, evidence links and optional external textures
+require Internet access; the running backend computes from local catalogs.
 
 7. WHAT THE PROJECT ACCOMPLISHES AGAINST THE CHALLENGE
+It communicates known analog contexts, makes comparison assumptions visible and
+connects exploration topics to testing activities. It does not yet discover new
+Earth sites or perform a global search using comparable satellite measurements.
+That gap matters and should be acknowledged during judging.
 
-Strongly addressed:
-    - It explains why visual similarity alone is not enough.
-    - It compares lunar and Martian candidate environments using multiple factors.
-    - It identifies Earth environments that can support technology testing.
-    - It connects analog environments to rover, drilling, sampling, habitat, and mobility work.
-    - It makes the comparison understandable through a visual interface.
-    - It includes NASA resource-family provenance rather than presenting unexplained numbers.
-    - It includes a mission simulator showing the operational consequences of site choices.
-    - It includes an educational mode for non-specialists and judges.
-    - It exposes limitations instead of hiding uncertainty.
-
-Partially addressed:
-    - Advanced analog discovery is currently proxy-based and catalogue-driven.
-    - The 3D terrain is a visualization layer, not yet a direct NASA terrain-data viewer.
-    - The AI briefing is an evidence-based application explanation, not a connected
-      generative AI service.
-    - The simulator is a planning model, not a NASA flight-certified life-support model.
-    - Several candidate sites are known or famous examples; finding overlooked locations
-      requires larger product-level datasets and a discovery pipeline.
-
-Not yet complete for operational science:
-    - Direct ingestion of selected NASA product IDs.
-    - Product retrieval dates and version information.
-    - Calibrated uncertainty and confidence intervals.
-    - Shared physical units for every analog-comparison dimension.
-    - Real NASA-derived terrain, illumination, thermal, mineralogy, and subsurface layers
-      rendered in the 3D globe.
-    - Validation against field-test measurements and mission hardware datasets.
-
-Conclusion:
-    ARES-LUNA accomplishes the challenge as a strong educational and decision-support
-    prototype. It demonstrates the complete workflow from planetary site screening to
-    Earth analog selection to mission simulation. It should be presented as a transparent
-    prototype for discovering and prioritizing analog sites, not as the final scientific
-    authority for selecting a real NASA base.
-
-
-8. SIMPLE DEMO SCRIPT FOR THE PRESENTATION
-
-Opening:
-    "Building a base on the Moon or Mars is not only a location problem. It is also a
-    technology-testing problem. We need Earth environments that reproduce the important
-    conditions, not just the appearance."
-
-Show the Moon:
-    Select Moon and point to Shackleton Crater Rim. Explain that sunlight, ice potential,
-    slopes, temperature, communication, and shielding all affect settlement planning.
-
-Show provenance:
-    Open the data provenance panel. Point out the LRO Diviner and LOLA references. Explain
-    that the project labels catalogue values and does not pretend that unverified values
-    are final mission measurements.
-
-Show analog discovery:
-    Click "Find Earth Analogs." Explain that Devon Island or another ranked site is useful
-    because it supports rover, drilling, field geology, or habitat testing. Emphasize that
-    the percentage is a proxy screening score, not a claim that the locations are identical.
-
-Show simulator:
-    Click "Simulate Mission." Change crew size, duration, power system, or water recycling.
-    Run the simulation and show power, battery, water, oxygen, radiation, and bottlenecks.
-
-Show education mode:
-    Open Educational Mode and use one lesson or quiz question. Explain that the same
-    scientific reasoning is available to students and judges without requiring a
-    planetary-science background.
-
-Closing:
-    "ARES-LUNA turns a difficult planetary science question into a transparent workflow:
-    compare the target, find the right Earth testing ground, simulate the mission, and
-    clearly show what is known, what is assumed, and what must be validated next."
-
+8. SIMPLE DEMO SCRIPT
+- Select a Moon scenario and open the descriptive source links.
+- Open Analog Discovery and explain one Earth location's field-testing context.
+- Explain that the /100 index is subjective, not a physical similarity percentage.
+- Change a ranking priority to demonstrate the effect of user preferences.
+- Run a simulator scenario, change an input and show the rerun warning.
+- Inspect full telemetry, water/oxygen/power deficits and the first failure day.
+- Switch to Mars and show its different descriptive context and source links.
+- Finish with the observation-extraction and validation work still required.
 
 9. QUESTIONS JUDGES MAY ASK
+Are the engineering inputs NASA measurements?
+No. They are illustrative assumptions inherited from the prototype. Source links
+support specific descriptive claims, not every number displayed alongside them.
 
-Q: Are the similarity percentages real measurements?
-A:
-    No. They are assumption-based proxy scores used to rank candidates during early
-    screening. The interface says this clearly. Product-level calibration is the next step.
+Does NOMINAL mean humans would survive?
+No. It means the declared simplified daily budget met the modeled demands and
+reserve rules. Food, equipment reliability, intraday power and real radiation
+transport are not validated. The indicator is not a survival probability.
 
-Q: Did you use NASA data?
-A:
-    The project is organized around NASA resource families including Earthdata, PDS, LRO
-    Diviner, LRO LOLA, MRO HiRISE, MRO CRISM, and MRO SHARAD. The current prototype uses
-    curated catalogue values linked to those resource families. We do not claim a value is
-    a direct product measurement until its product ID and retrieval metadata are stored.
+Is the analog similarity scientifically calibrated?
+No. The retained rule compares subjective profiles and non-equivalent proxy
+features. We disclose this limitation and do not call it measured physical fidelity.
 
-Q: Is the AI connected to a language model?
-A:
-    The current briefing is a transparent evidence-based explanation generated by the
-    application. It is deliberately labelled as not being a live AI or NASA-certified
-    recommendation. A future version can connect a model with retrieval-augmented NASA
-    evidence and citations.
+Why use Earth if conditions are different?
+An Earth site can support a specific terrain, geology or operations experiment
+without reproducing reduced gravity, vacuum, Mars pressure or space radiation.
 
-Q: Is the simulator flight-ready?
-A:
-    No. It is a planning and education simulator. It helps users understand trade-offs
-    between power, water, oxygen, crew size, radiation shielding, and mission duration.
-    Engineering qualification would require validated hardware models, uncertainty
-    propagation, and mission-specific NASA constraints.
-
-Q: Why are Earth analogs useful?
-A:
-    Earth analogs allow teams to test rovers, suits, drills, sampling methods, navigation,
-    habitats, and field procedures before attempting the same work in space.
-
+Does the globe show live data?
+No. It is a visual navigation aid with fixed lighting and decorative tracks.
+External texture availability is not guaranteed; cards work without WebGL.
 
 10. NEXT VERSION PLAN
-
-Priority 1:
-    Ingest a small, traceable set of actual NASA products for a few demonstration sites.
-    Store product IDs, URLs, retrieval timestamps, processing level, and uncertainty.
-
-Priority 2:
-    Add a technology-testing matrix:
-    analog site -> tested technology -> NASA or agency campaign -> measured result.
-
-Priority 3:
-    Replace the procedural globe layers with NASA-derived terrain, illumination, thermal,
-    mineralogy, and subsurface overlays.
-
-Priority 4:
-    Add calibrated similarity methods with explicit units, normalization, missing-data
-    handling, uncertainty propagation, and sensitivity analysis.
-
-Priority 5:
-    Expand the discovery search to less famous Earth locations so the system can identify
-    overlooked analogs instead of only ranking known examples.
-
-Priority 6:
-    Improve accessibility, keyboard navigation, mobile navigation, modal focus handling,
-    and reduced-motion support.
-
+Extract comparable observations with product/version IDs, footprints, units,
+resolution, time coverage and uncertainty. Keep measured observations separate
+from scenario inputs. Calibrate matching on equivalent physical dimensions,
+validate against independent comparisons, then broaden the search beyond known sites.
 
 11. ONE-SENTENCE PROJECT SUMMARY
-
-ARES-LUNA is a transparent NASA-resource-guided prototype that helps people compare Moon
-and Mars settlement candidates, discover Earth environments for testing exploration
-technology, simulate mission survival trade-offs, and understand the science in simple
-language.
+ARES-LUNA links evidence about known terrestrial analogs with transparent planetary
+comparison scenarios and a resource-budget demonstrator, while showing where
+measurements and scientific validation are still missing.

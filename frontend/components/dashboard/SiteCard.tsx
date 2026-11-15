@@ -35,6 +35,7 @@ export const SiteCard: React.FC<SiteCardProps> = ({
 
   return (
     <div
+      role="button" tabIndex={0} onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onSelect(); } }}
       onClick={onSelect}
       className={`relative p-5 rounded-2xl cursor-pointer transition-all duration-300 ${
         isMoon ? "cyber-card" : "cyber-card-mars"
@@ -83,6 +84,7 @@ export const SiteCard: React.FC<SiteCardProps> = ({
         {site.geological_context}
       </p>
 
+      <p className="text-amber-200 text-xs mb-2">Scenario assumptions — not measured site values</p>
       {/* Grid of Key Telemetry */}
       <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-xl bg-space-950/60 border border-space-800/80 mb-4 text-xs font-mono">
         <div>
@@ -96,7 +98,7 @@ export const SiteCard: React.FC<SiteCardProps> = ({
         <div>
           <div className="flex items-center gap-1 text-[10px] text-slate-400 mb-0.5">
             <Droplets className="w-3 h-3 text-cyan-400" />
-            Water Ice
+            Ice assumption
           </div>
           <div className="text-cyan-300 font-bold">{site.water_ice_probability_pct}%</div>
         </div>
@@ -166,7 +168,7 @@ export const SiteCard: React.FC<SiteCardProps> = ({
           className="flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono bg-cyan-950/70 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-800/80 flex items-center justify-center gap-1 transition-all"
         >
           <Sparkles className="w-3 h-3 text-cyan-400" />
-          AI Briefing
+          Site Briefing
         </button>
       </div>
     </div>

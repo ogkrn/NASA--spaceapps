@@ -1,11 +1,7 @@
-# Planetary Data Pipeline
+# Catalog validation, not ingestion
 
-## Overview
-This module automates the extraction, transformation, and loading (ETL) of scientific planetary observation datasets into the ARES-LUNA engine:
+Run `python data_pipeline/scripts/ingest_lro_diviner.py` from the repository root after installing backend dependencies. The legacy-named script validates the nine planetary and six Earth JSON records and their evidence fields. It downloads no observations and performs no Diviner, LOLA, SHARAD, CRISM or Earthdata processing.
 
-- **NASA LRO Diviner Lunar Radiometer Experiment**: Surface thermal ranges and cold-trap permanently shadowed regions (PSRs).
-- **LRO LOLA (Lunar Orbiter Laser Altimeter)**: Digital elevation models (DEM) and slope trafficability gradients.
-- **Mars Reconnaissance Orbiter (MRO) HiRISE & CRISM**: Mineralogy (hydrated sulfates, clay minerals) and meter-scale topographic obstacles.
-- **MRO SHARAD (Shallow Radar)**: Subsurface water-ice sheet detections across Arcadia and Utopia Planitia.
-- **Earth Planetary Analog Datasets**: Terrestrial field campaigns (NASA HMP Devon Island, HI-SEAS Mauna Loa, Atacama LITA, ESA PANGAEA Lanzarote, McMurdo Dry Valleys).
+A future ingestion pipeline must record source product identifiers/version, license/terms, acquisition period, coordinate reference system, region boundaries, units, spatial resolution, nodata handling, aggregation, uncertainty and reproducible extraction code. Never use a descriptive reference as provenance for unrelated numerical engineering assumptions.
 
+The script also preserves the newer lunar manifest output, with schema-only validation status and empty product identifiers. It verifies the referenced discovery-resource IDs exist.

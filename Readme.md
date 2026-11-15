@@ -1,223 +1,62 @@
-# ARES-LUNA: Planetary Analog Intelligence + Mission Simulation
+# ARES-LUNA — evidence and exploration scenarios
 
-> **NASA Space Apps Challenge 2026** — *Permanent Moon Base Locations and Mars*  
-> **Concept**: Planetary Analog Intelligence + Mission Simulation Engine
+Explore nine Moon/Mars scenarios and six established Earth analog locations. Compare priorities, investigate source evidence, and run a transparent resource-budget exercise. Built for the NASA Space Apps terrestrial analog challenge; not endorsed by NASA.
 
-[![Next.js](https://img.shields.io/badge/Frontend-Next.js%2014-black?logo=next.js)](https://nextjs.org/)
-[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Three.js](https://img.shields.io/badge/3D%20Graphics-Three.js-black?logo=threedotjs)](https://threejs.org/)
-[![Python](https://img.shields.io/badge/Scientific%20Engine-Python%20%7C%20NumPy%20%7C%20Scikit--Learn-blue?logo=python)](https://python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+**Scientific status:** NASA, ESA and USGS references support descriptive context. The inherited engineering values and Earth profile scores have no verified measurement provenance and are explicitly labelled illustrative. The app does not discover new analog sites, ingest satellite products, certify landings, or calculate survival probabilities. See [data provenance](docs/DATA_PROVENANCE.md).
 
----
+## What you can do
 
-## 🚀 Concept Overview
+- Select five lunar and four Martian scenarios using cards or the procedural 3D globe. Cards remain usable without WebGL.
+- Rank scenarios with six adjustable priorities using TOPSIS, a relative decision-ranking method.
+- Compare Earth analog profiles and follow the evidence for relevant field activities.
+- Run a daily water, oxygen and electrical-energy budget with three power strategies.
+- Inspect full telemetry, assumptions, unmet demand and the settings used for each completed run.
+- Read audience-specific, deterministic site briefings and use the educational lessons/quiz.
 
-ARES-LUNA bridges the gap between deep planetary science and accessible educational decision-making. By combining multi-criteria scientific decision analysis with transparent terrestrial analog screening, 3D visualization, and dynamic mission life-support simulation, the platform provides mission planners and hackathon judges with an evidence-aware settlement evaluation suite. Catalogue values are labelled as screening values until product-level ingestion and uncertainty metadata are attached.
+## Run locally
 
-### Key Capabilities:
-- **Intermediate-Level Scientific Comparison**: TOPSIS (*Technique for Order of Preference by Similarity to Ideal Solution*) multi-criteria evaluation across 6 critical planetary engineering vectors (Illumination, Water-Ice Confidence, Terrain Slope Trafficability, Direct-to-Earth Line of Sight, Natural Radiation Shielding, Thermal Delta).
-- **Advanced Automated Analog Discovery**: High-dimensional vector matching engine that automatically identifies Earth's highest-fidelity proving grounds (e.g., Devon Island Haughton Crater, HI-SEAS Mauna Loa, Atacama Desert, Svalbard AMASE, Lanzarote Lava Tubes, McMurdo Dry Valleys) for any lunar or Martian candidate site.
-- **Interactive 3D Planetary Visualization**: Real-time WebGL rendering in Three.js featuring planetary textures, terminator lighting, and interactive landing nodes.
-- **Mission Planning Simulator**: Day-by-day physics modeling of consumable drawdowns, closed-loop ECLSS water recycling, solar diurnal cycles vs nuclear baseload, and regolith radiation attenuation ($I = I_0 e^{-\mu \rho x}$).
-- **AI-Generated Scientific Briefings**: Synthesis engine providing tailored briefings across Scientific, Educational, and Executive modes.
-- **Educational Exploration Mode**: Plain-English survival principles, interactive guided lessons, and an astronaut readiness challenge quiz.
+Use Python 3.12+ and Node.js 22. No account, API key, paid service or database is required. Installation needs Internet access; normal calculations use bundled JSON. External evidence links and the optional globe textures need Internet access; the globe retains a procedural fallback.
 
----
-
-## 🛠️ Architecture & Tech Stack Selection
-
-As specified in the system architecture:
-
-```
-┌────────────────────────────────────────────────────────┐
-│                   Frontend (Next.js)                   │
-│   • Dashboard · Map · Planet Selector · Analytics      │
-│   • Tailwind CSS · Lucide · Three.js WebGL             │
-└───────────────────────────┬────────────────────────────┘
-                            │ REST APIs
-┌───────────────────────────▼────────────────────────────┐
-│                    Backend (FastAPI)                   │
-│   • REST APIs · Data Orchestration · Candidates        │
-└─────────────┬────────────────────────────┬─────────────┘
-              │                            │
-┌─────────────▼───────────────┐ ┌──────────▼───────────────┐
-│      Scientific Engine      │ │     Geospatial Engine    │
-│   • Python · NumPy · Pandas │ │   • Spherical Geodesy    │
-│   • Scikit-learn (TOPSIS)   │ │   • Slope & Coordinates  │
-└─────────────┬───────────────┘ └──────────┬───────────────┘
-              │                            │
-┌─────────────▼────────────────────────────▼─────────────┐
-│                 Data Sources & Ingestion               │
-│   • NASA Earthdata · PDS · LRO Diviner / LOLA          │
-│   • ESA Copernicus · JAXA · MRO CRISM / HiRISE         │
-└─────────────────────────────┬──────────────────────────┘
-                              │
-┌─────────────────────────────▼──────────────────────────┐
-│                         Storage                        │
-│   • SQLite / GeoJSON (Instant Local Zero-Setup Mode)   │
-│   • PostgreSQL + PostGIS (Production Deployment)       │
-└────────────────────────────────────────────────────────┘
-```
-
----
-
-## 📁 Repository Structure
-
-```
-NASA-spaceapps/
-├── backend/
-│   ├── app/
-│   │   ├── api/v1/
-│   │   │   ├── candidates.py           # Candidate sites API
-│   │   │   ├── analogs.py              # Earth analogs & automated matching
-│   │   │   ├── scientific_analysis.py  # TOPSIS MCDA ranking
-│   │   │   ├── simulator.py            # Mission physics simulation
-│   │   │   └── ai_explain.py           # AI briefings & educational takeaways
-│   │   ├── scientific_engine/
-│   │   │   ├── analog_matcher.py       # Vector similarity & discovery
-│   │   │   ├── mcda_scoring.py         # TOPSIS & AHP mathematical engine
-│   │   │   └── mission_physics.py      # ECLSS & radiation attenuation models
-│   │   ├── geospatial_engine/
-│   │   │   └── coordinates.py          # Spherical planetary geodesy
-│   │   ├── data/
-│   │   │   ├── lunar_sites.json        # Curated LRO Diviner/LOLA dataset
-│   │   │   ├── mars_sites.json         # Curated MRO HiRISE/SHARAD dataset
-│   │   │   └── earth_analogs.json      # Terrestrial analog stations
-│   │   ├── tests/
-│   │   │   └── test_engines.py         # Scientific unit tests
-│   │   ├── config.py
-│   │   └── main.py                     # FastAPI entrypoint
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── run.py
-├── frontend/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx                    # Main mission control application
-│   │   └── globals.css                 # Cyber space dark theme styling
-│   ├── components/
-│   │   ├── 3d/
-│   │   │   └── PlanetaryGlobe.tsx      # Three.js 3D interactive visualizer
-│   │   ├── dashboard/
-│   │   │   ├── RadarComparison.tsx     # 6-axis criteria radar chart
-│   │   │   ├── SiteCard.tsx            # Candidate site cards
-│   │   │   └── MCDARankingView.tsx     # TOPSIS interactive sensitivity ranker
-│   │   ├── analog/
-│   │   │   └── AnalogDiscoveryView.tsx # Terrestrial analog matching matrix
-│   │   ├── simulator/
-│   │   │   └── MissionSimulatorView.tsx# Life support & mission timeline
-│   │   ├── explanation/
-│   │   │   └── AIExplanationModal.tsx  # Generative AI briefing modal
-│   │   ├── educational/
-│   │   │   └── EducationalModeView.tsx # Educational story mode & quiz
-│   │   └── Navbar.tsx                  # Planet & mode switcher header
-│   ├── lib/
-│   │   ├── api.ts                      # Backend client & fallback dataset
-│   │   ├── types.ts                    # TypeScript schemas
-│   │   └── utils.ts
-│   ├── package.json
-│   ├── tailwind.config.ts
-│   └── Dockerfile
-├── data_pipeline/
-│   ├── scripts/
-│   │   └── ingest_lro_diviner.py       # Ingestion & normalization scripts
-│   └── README.md
-├── docs/
-│   ├── ARCHITECTURE.md                 # Detailed architectural blueprint
-│   ├── SCIENTIFIC_METHODOLOGY.md       # Formulas and physics derivations
-│   └── USER_GUIDE.md                   # Step-by-step user and judge manual
-├── docker-compose.yml                  # Full stack containerization
-└── README.md
-```
-
----
-
-## ⚡ Quick Start
-
-### Option 1: Run with Docker Compose (Recommended)
+From the repository root (Linux/macOS):
 
 ```bash
-docker-compose up --build
-```
-- Open Frontend: [http://localhost:3000](http://localhost:3000)
-- Backend Docs (Swagger): [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-### Option 2: Run Locally (Fast Development Mode)
-
-#### 1. Backend (FastAPI + Scientific Engine)
-```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements-dev.txt
 cd backend
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
-
-pip install -r requirements.txt
 python run.py
 ```
-Backend will start at `http://127.0.0.1:8000`.
 
-#### 2. Frontend (Next.js 14 + Three.js)
-In a separate terminal:
+In a second terminal, from the repository root:
+
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
 
----
+Open http://localhost:3000. API documentation: http://127.0.0.1:8000/docs.
+The frontend proxies `/api/backend` to the backend. For a different backend host, set `BACKEND_URL` before starting development or building production. `NEXT_PUBLIC_API_URL` remains an optional build-time override.
 
-## 🧪 Scientific Verification & Tests
+Production frontend: `npm run build` then `npm start` inside `frontend`. Never reuse someone else's `.next` output: always build from source.
 
-To execute the unit test suite verifying the TOPSIS engine, analog matcher, geodesy distances, and physics simulation:
+Optional container configuration: `docker compose up --build`. Docker execution was not available during this repair; this path is not runtime-verified. Ports bind to localhost. The previous unused PostGIS service is omitted because no application code queried it.
+
+## Verify
+
+From the repository root with the virtual environment active:
 
 ```bash
-cd backend
-venv\Scripts\python -m app.tests.test_engines
+python -m pytest -q
+python data_pipeline/scripts/ingest_lro_diviner.py
+cd frontend
+npm test
+npm run build
+npm run typecheck
 ```
 
-Expected output:
-```
-Analog Match Passed: Top match for Shackleton is Haughton Impact Crater (94.2%)
-MCDA Passed: Top ranked lunar site is Shackleton Crater Rim (Closeness: 0.8841)
-Simulator Passed: Viability score 88.0, Status: NOMINAL
-Geospatial Passed: Distance = 119.3 km, Traverse time = 17.55h
-ALL SCIENTIFIC ENGINE UNIT TESTS PASSED!
-```
+The catalog script validates local records; its legacy filename does not imply data ingestion. Unit tests verify software behaviour and budgets, not physical accuracy. See [methodology](docs/SCIENTIFIC_METHODOLOGY.md), [user guide](docs/USER_GUIDE.md), [architecture](docs/ARCHITECTURE.md), and [repair report](docs/PACKAGE_A_CHANGES.md).
 
----
+## Extension path
 
-## 🛰️ Data Sources & References
-
-1. **NASA Lunar Reconnaissance Orbiter (LRO)**:
-   - Diviner Lunar Radiometer Experiment (thermal context and PSRs)
-   - LOLA (Lunar Orbiter Laser Altimeter DEM and slope context)
-2. **NASA Mars Reconnaissance Orbiter (MRO)**:
-   - HiRISE (High Resolution Imaging Science Experiment)
-   - CRISM (Compact Reconnaissance Imaging Spectrometer for Mars)
-   - SHARAD (Shallow Subsurface Radar)
-3. **Official NASA resource families used by the prototype**:
-   - [NASA Earthdata](https://www.earthdata.nasa.gov/)
-   - [NASA Planetary Data System](https://pds.nasa.gov/)
-   - [LRO Diviner products](https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=DIVINER)
-   - [LRO LOLA products](https://ode.rsl.wustl.edu/moon/indexProductSearch.aspx?display=full&mission=LRO&instrument=LOLA)
-   - [MRO HiRISE](https://hirise.lpl.arizona.edu/)
-   - [MRO CRISM](https://crism.jhuapl.edu/)
-   - [MRO SHARAD](https://mars.nasa.gov/mro/mission/instruments/sharad/)
-4. **Terrestrial analog campaigns**:
-   - NASA Haughton-Mars Project (HMP), Devon Island, Canada
-   - HI-SEAS (Hawaii Space Exploration Analog and Simulation), Mauna Loa, USA
-   - Atacama Desert (Life in the Atacama - LITA), Chile
-   - Arctic Mars Analog Svalbard Expedition (AMASE), Norway
-   - ESA PANGAEA Astronaut Geological Training, Lanzarote, Spain
-   - McMurdo Dry Valleys, Antarctica
-
-The backend exposes these references at `GET /api/v1/resources`. Each candidate response includes a
-`data_provenance` object describing the resource family, fields, confidence, and whether values are
-catalogue references or product-level measurements. The ingestion validation script intentionally does
-not claim to download NASA products until product identifiers and retrieval timestamps are persisted.
+Keep sourced observations separate from scenario assumptions. Before replacing an engineering value, record the exact product/version, region, resolution, units, extraction code and uncertainty. A source about a region does not validate every number assigned to that region. A global search, new analog discovery and validated physical similarity require a subsequent data-processing phase.

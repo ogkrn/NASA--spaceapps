@@ -33,3 +33,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+
+# Local compiler and repair artifacts
+*.tsbuildinfo
+.package-a-backup-*/

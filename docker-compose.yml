@@ -1,58 +1,15 @@
-version: "3.8"
-
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: ares-luna-backend
+    build: ./backend
+    ports: ["127.0.0.1:8000:8000"]
     restart: unless-stopped
-    ports:
-      - "8000:8000"
-    environment:
-      - PROJECT_NAME=ARES-LUNA Planetary Analog Intelligence
-      - VERSION=1.0.0
-      - CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
-      - DATABASE_URL=postgresql://nasa:spaceapps2026@db:5432/ares_luna
-    depends_on:
-      - db
-    networks:
-      - ares-network
-
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-    container_name: ares-luna-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
+      args:
+        BACKEND_URL: http://backend:8000
+    ports: ["127.0.0.1:3000:3000"]
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
-    depends_on:
-      - backend
-    networks:
-      - ares-network
-
-  db:
-    image: postgis/postgis:16-3.4
-    container_name: ares-luna-db
+      BACKEND_URL: http://backend:8000
+    depends_on: [backend]
     restart: unless-stopped
-    environment:
-      - POSTGRES_USER=nasa
-      - POSTGRES_PASSWORD=spaceapps2026
-      - POSTGRES_DB=ares_luna
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - ares-network
-
-networks:
-  ares-network:
-    driver: bridge
-
-volumes:
-  postgres_data:
-

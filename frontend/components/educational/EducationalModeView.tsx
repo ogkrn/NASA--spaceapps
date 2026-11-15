@@ -33,95 +33,28 @@ export const EducationalModeView: React.FC<EducationalModeViewProps> = ({
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
 
   const lessons = [
-    {
-      title: "The Golden Rule: Eternal Sunlight vs Deep Cold",
-      icon: Sun,
-      color: "text-amber-400",
-      content: (
-        <>
-          <p className="mb-3 text-slate-300">
-            Unlike Earth with its gentle 24-hour day, the Moon experiences a brutal 14-day night where temperatures plunge
-            to -130°C (-200°F). However, at the lunar South Pole, giant peaks like <strong>Malapert Mountain</strong> and crater rims
-            stand so tall that the sun barely dips below the horizon!
-          </p>
-          <div className="p-3.5 rounded-xl bg-space-950/80 border border-amber-900/40 text-xs text-amber-200">
-            💡 <strong>Why it matters:</strong> Continuous sunlight means solar panels can generate electricity almost non-stop,
-            drastically reducing the hundreds of tons of heavy batteries that astronauts would otherwise need to launch from Earth!
-          </div>
-        </>
-      ),
-    },
-    {
-      title: "Water is Gold: Mining Frozen Ice Traps",
-      icon: Droplets,
-      color: "text-cyan-400",
-      content: (
-        <>
-          <p className="mb-3 text-slate-300">
-            In crater hollows like <strong>Shackleton</strong>, sunlight has not entered for over 2 billion years. These are called
-            <strong> Permanently Shadowed Regions (PSRs)</strong>. They act as cosmic cold traps, hoarding billions of tons of water ice
-            delivered by ancient comets.
-          </p>
-          <div className="p-3.5 rounded-xl bg-space-950/80 border border-cyan-900/40 text-xs text-cyan-200">
-            💧 <strong>Space Secret:</strong> Water isn&apos;t just for drinking! We can split water ($H_2O$) using solar electricity
-            into liquid hydrogen ($H_2$) and liquid oxygen ($O_2$)—the most powerful rocket propellant in human history!
-          </div>
-        </>
-      ),
-    },
-    {
-      title: "The Silent Threat: Cosmic Radiation & Lava Tubes",
-      icon: ShieldCheck,
-      color: "text-purple-400",
-      content: (
-        <>
-          <p className="mb-3 text-slate-300">
-            Earth has a magnetic field and a thick atmosphere that shields us from cosmic rays and solar flares.
-            On the Moon and Mars, surface astronauts receive dangerous radiation doses that limit mission durations.
-          </p>
-          <div className="p-3.5 rounded-xl bg-space-950/80 border border-purple-900/40 text-xs text-purple-200">
-            🛡️ <strong>Nature&apos;s Fortress:</strong> Collapsed volcanic lava tubes like <strong>Marius Hills</strong> offer natural
-            underground caves over 50 meters tall! By building our habitat inside, astronauts get 99.4% radiation shielding
-            and a constant temperature of -20°C without having to dig.
-          </div>
-        </>
-      ),
-    },
-    {
-      title: "Why Earth Analogs are Mission-Critical",
-      icon: Compass,
-      color: "text-emerald-400",
-      content: (
-        <>
-          <p className="mb-3 text-slate-300">
-            Before launching a $10 billion rocket, space agencies test everything on Earth&apos;s most extreme landscapes:
-            Devon Island in the Arctic, the hyper-arid Atacama Desert, and the volcanic tubes of Hawaii and Lanzarote.
-          </p>
-          <div className="p-3.5 rounded-xl bg-space-950/80 border border-emerald-900/40 text-xs text-emerald-200">
-            🧪 <strong>Ground Truth:</strong> When rovers drive over abrasive volcanic dust at HI-SEAS, engineers learn how to
-            prevent lunar dust from shredding spacesuit seals and clogging rover bearings.
-          </div>
-        </>
-      ),
-    },
+    {title: "Power: sunlight and storage", icon: Sun, color: "text-amber-400", content: <p>{isMoon ? "Lunar illumination varies with location and time. Polar terrain can offer useful lighting opportunities, but continuous power must be checked for a particular site and mission period." : "Mars has a day-night cycle and dust can reduce sunlight reaching solar panels. A daily energy total alone cannot prove that batteries last through every dark interval."} The simulator lets you explore assumptions, not predict an actual mission.</p>},
+    {title: "Water: evidence is not extraction", icon: Droplets, color: "text-cyan-400", content: <p>{isMoon ? "Shadowed polar environments are investigated for ice. Evidence for ice does not establish how much a particular mining system can recover." : "NASA maps identify regions such as Arcadia for buried-ice investigation. Jezero's ancient lake and delta record past water, not a verified modern drinking-water supply."} Extraction yield is an explicit scenario assumption here.</p>},
+    {title: "Shelter: an open research question", icon: ShieldCheck, color: "text-purple-400", content: <p>Pits and possible lava tubes motivate exploration of sheltered environments. A visible opening does not establish a safe roof, a known cave volume or a fixed radiation reduction. The app's shielding inputs are illustrative; source links describe what observations actually support.</p>},
+    {title: "Earth analogs: practise specific tasks", icon: Compass, color: "text-emerald-400", content: <p>NASA and ESA document field research at locations including Devon Island, Atacama, Svalbard and Lanzarote. A site can help test a particular instrument or operation while differing greatly in gravity, atmosphere and biology. Read the evidence links before interpreting the shortlist index.</p>},
   ];
 
   const quiz = [
     {
-      question: "Why is the Lunar South Pole preferred over the lunar equator for a permanent base?",
+      question: "What makes lunar polar regions interesting for exploration?",
       options: [
         "It is closer to Earth and easier to see with binoculars",
-        "It combines near-permanent solar illumination with frozen water ice in shadowed craters",
+        "Some areas offer useful illumination near shadowed environments investigated for ice",
         "It has a denser atmosphere than the rest of the Moon",
         "It experiences warmer temperatures all year round",
       ],
       correct: 1,
     },
     {
-      question: "What makes lava tubes like Marius Hills attractive for human habitats?",
+      question: "Why investigate pits and possible lava tubes?",
       options: [
         "They have flowing rivers of liquid water",
-        "They provide near-total natural protection from deadly cosmic radiation and micrometeorites",
+        "They may offer shelter, but access, structure and radiation conditions require investigation",
         "They already have breathable air trapped inside",
         "They are made of pure gold and titanium",
       ],
@@ -141,6 +74,7 @@ export const EducationalModeView: React.FC<EducationalModeViewProps> = ({
 
   const handleSelectOption = (qIdx: number, optIdx: number) => {
     setSelectedAnswers({ ...selectedAnswers, [qIdx]: optIdx });
+    setQuizScore(null);
   };
 
   const handleCheckQuiz = () => {
@@ -161,7 +95,7 @@ export const EducationalModeView: React.FC<EducationalModeViewProps> = ({
             Educational Exploration Mode · Designed for Judges & Learners
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
-            How to Build a Permanent Home on the {currentPlanet}
+            Explore {currentPlanet}: evidence, assumptions and Earth analogs
           </h2>
           <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
             Discover the physics, geology, and survival engineering behind establishing humanity&apos;s first permanent
@@ -244,7 +178,7 @@ export const EducationalModeView: React.FC<EducationalModeViewProps> = ({
                 Score: {quizScore} / {quiz.length}
               </span>
               <span className="text-[10px] block uppercase font-mono text-cyan-400">
-                {quizScore === quiz.length ? "Astronaut Certified! 🚀" : "Review Lessons!"}
+                {quizScore === quiz.length ? "Concepts reviewed ✓" : "Review Lessons!"}
               </span>
             </div>
           )}

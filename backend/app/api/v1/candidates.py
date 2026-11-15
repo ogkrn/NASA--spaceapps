@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional
+from typing import List, Optional, Literal
 from fastapi import APIRouter, HTTPException, Query
 
 from app.models.candidate import CandidateSite
@@ -32,15 +32,16 @@ def get_all_sites() -> List[dict]:
                 {"id": "nasa-pds", "fields": ["scientific_significance"]},
             ]
         site["data_provenance"] = {
-            "status": "curated_catalogue_values",
-            "confidence": "medium",
-            "note": "Resource families are identified; product-level identifiers and retrieval timestamps are pending ingestion.",
+            "status": "scenario_inputs_not_observations",
+            "confidence": "unverified",
+            "note": "Suggested resources for future verification only. No listed field was extracted from these archives; numeric inputs remain illustrative assumptions.",
             "sources": sources,
         }
     return sites
 
+
 @router.get("", response_model=List[CandidateSite])
-def list_candidate_sites(body: Optional[str] = Query(None, description="Filter by 'Moon' or 'Mars'")):
+def list_candidate_sites(body: Optional[Literal["Moon", "Mars"]] = Query(None, description="Filter by 'Moon' or 'Mars'")):
     sites = get_all_sites()
     if body:
         sites = [s for s in sites if s["body"].lower() == body.lower()]

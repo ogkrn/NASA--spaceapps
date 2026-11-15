@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-space-700/80 bg-space-950/85 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-3 flex flex-wrap gap-3 items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-800 p-0.5 shadow-lg shadow-cyan-900/30">
@@ -36,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ARES<span className="text-cyan-400">·</span>LUNA
               </span>
               <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">
-                v1.0 Analog-AI
+                v1.1 Evidence + Scenarios
               </span>
             </div>
             <p className="text-[11px] text-slate-400 hidden sm:block">
@@ -46,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-1 bg-space-900/90 p-1 rounded-xl border border-space-700">
+        <nav className="order-3 w-full md:order-none md:w-auto flex flex-wrap items-center gap-1 bg-space-900/90 p-1 rounded-xl border border-space-700">
           <button
             onClick={() => onSelectTab("explorer")}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${

@@ -1,6 +1,6 @@
 {
   "dataset": "lunar_sites.json",
-  "status": "validated_curated_catalogue",
+  "status": "schema_validated_scenario_catalogue",
   "record_count": 5,
   "resource_families": [
     "lro-diviner",
@@ -9,5 +9,5 @@
   ],
   "product_identifiers": [],
   "retrieved_at": null,
-  "note": "No remote download is performed by this validation script."
+  "note": "Schema and reference presence checked only. No remote observation download or scientific validation performed."
 }
