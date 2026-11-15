@@ -10,7 +10,11 @@ class Settings(BaseSettings):
     BASE_DIR: Path = Path(__file__).resolve().parent
     DATA_DIR: Path = BASE_DIR / "data"
     
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://aresluna.vercel.app",
+    ]
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
